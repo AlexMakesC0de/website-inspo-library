@@ -46,6 +46,12 @@ typography:
     fontWeight: 400
     lineHeight: 1
     letterSpacing: "normal"
+  brief:
+    fontFamily: "Libre Caslon Display, Georgia, serif"
+    fontSize: "clamp(1.0625rem, 1.6vw, 1.25rem)"
+    fontWeight: 400
+    lineHeight: 1.35
+    letterSpacing: "normal"
   body:
     fontFamily: "Sometype Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
     fontSize: "0.8125rem"
@@ -78,13 +84,13 @@ components:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
     rounded: "{rounded.none}"
-    padding: "10px 14px"
+    padding: "11px 14px"
     typography: "{typography.label}"
   chip-active:
     backgroundColor: "{colors.ink}"
     textColor: "{colors.paper}"
     rounded: "{rounded.none}"
-    padding: "10px 14px"
+    padding: "11px 14px"
     typography: "{typography.label}"
   tag:
     backgroundColor: "{colors.paper}"
@@ -97,8 +103,38 @@ components:
     textColor: "{colors.ink}"
     rounded: "{rounded.none}"
     padding: "0px"
-  button-copy:
+  tab:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink-soft}"
+    rounded: "{rounded.none}"
+    padding: "18px 0px 8px"
+    typography: "{typography.tab}"
+  tab-selected:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: "18px 0px 8px"
+    typography: "{typography.tab}"
+  field:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: "6px 0px"
+    typography: "{typography.body}"
+  button:
     backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: "11px 14px"
+    typography: "{typography.label}"
+  button-solid:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.paper}"
+    rounded: "{rounded.none}"
+    padding: "11px 14px"
+    typography: "{typography.label}"
+  button-copy:
+    backgroundColor: "{colors.paper-raised}"
     textColor: "{colors.ink}"
     rounded: "{rounded.none}"
     padding: "8px 12px"
@@ -108,6 +144,33 @@ components:
     textColor: "{colors.paper}"
     rounded: "{rounded.none}"
     padding: "8px 12px"
+    typography: "{typography.label}"
+  artifact:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: "16px"
+    typography: "{typography.body}"
+  workspace-button:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: "0px 10px"
+    height: "26px"
+    typography: "{typography.label}"
+  workspace-button-active:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.paper}"
+    rounded: "{rounded.none}"
+    padding: "0px 10px"
+    height: "26px"
+    typography: "{typography.label}"
+  comment-pin:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.paper}"
+    rounded: "{rounded.none}"
+    padding: "0px 5px"
+    height: "20px"
     typography: "{typography.label}"
   inspector-panel:
     backgroundColor: "{colors.paper-raised}"
@@ -132,7 +195,7 @@ This is printed matter that happens to be running in a browser. Warm off-white s
 
 The density is deliberate and slightly higher than comfortable. This is an index, not a moodboard — it should feel like a working document that has been set properly, not a gallery that has been art-directed. Every number on the page is real and recomputes: the chip counts, the `NN / TT` index, the tag overflow. Nothing is decorative typography pretending to be data.
 
-Color is almost entirely absent from the chrome, because the chrome is competing with 28 screenshots that each arrive with their own palette and will always win. The single exception is the group ink system: each design group owns one saturated printing ink, and that ink is the only chroma the interface itself is permitted. It does structural work — identifying a group at a glance across the whole grid — and it never decorates.
+Color is almost entirely absent from the chrome, because the chrome is competing with a grid of screenshots that each arrive with their own palette and will always win. The single exception is the group ink system: each design group owns one saturated printing ink, and that ink is the only chroma the interface itself is permitted. It does structural work — identifying a group at a glance across the whole grid — and it never decorates.
 
 **Key Characteristics:**
 - Warm paper ground, never white, never cream-sweet
@@ -140,6 +203,7 @@ Color is almost entirely absent from the chrome, because the chrome is competing
 - Monospace for all apparatus, high-contrast serif for all names
 - Flat by default: depth comes from border weight and tonal layering, not shadow
 - One saturated ink per group, used structurally and sparingly
+- Color is the only thing that animates; nothing moves, slides, or lifts on hover
 
 ## Colors
 
@@ -147,7 +211,7 @@ A neutral warm-paper system with a functional eight-ink accent palette borrowed 
 
 ### Primary
 
-- **Group Inks** (eight values, `ink-minium` through `ink-oxide`): The functional accent palette. Each design group is permanently assigned one ink at creation. That ink appears in exactly three places: the group's diamond marker, the fill of its chip when active, and the group label on its cards. Assigning a ninth group cycles back to the first. These are chosen as printing inks — dense, slightly dirty, never fluorescent — so they sit on paper rather than glowing on top of it.
+- **Group Inks** (eight values, `ink-minium` through `ink-oxide`): The functional accent palette. Each design group is permanently assigned one ink at creation. That ink appears in exactly four places: the group's diamond marker, the fill of its chip when active, the group label on its cards, and the border of a card during its arrival pass. Assigning a ninth group cycles back to the first, so the eight inks repeat rather than expand. These are chosen as printing inks — dense, slightly dirty, never fluorescent — so they sit on paper rather than glowing on top of it.
 
 ### Neutral
 
@@ -177,6 +241,7 @@ A neutral warm-paper system with a functional eight-ink accent palette borrowed 
 - **Title SM** (400, 22px, 1.05): Variant titles on studio comparison tiles. A tile is a card at roughly two-thirds width, and 26px crowds a two-line generated title at that size.
 - **Title XS** (400, 15px, 1.15): Reference-card titles in the studio's selected-references strip. Those cards run 180px wide; this is the smallest size at which the serif still reads as a name rather than as decoration.
 - **Tab** (400, 20px, 1): The Library / Studio navigation. Sits between Title and Title SM because a tab names a whole surface but must not outweigh the masthead above it.
+- **Brief** (400, `clamp(1.0625rem, 1.6vw, 1.25rem)`, 1.35): The studio's brief field, and nothing else. The only serif in the system you can type into — see The Brief Is Prose Rule.
 - **Body** (400, 13px, 1.6): Recipe, copy brief, and prompt text in the detail overlay. Capped at 68ch.
 - **Label** (500, 11px, uppercase, 0.12em): Chip labels, field names, button text, section marks. The tracking is what makes mono read as apparatus rather than as code.
 - **Meta** (400, 12px, 0.02em): Tags, descriptors, counts, indices.
@@ -201,15 +266,21 @@ The chip bar wraps freely to as many rows as it needs and never scrolls horizont
 
 Card captions push their footer down with `margin-top: auto`, so group labels and indices align across a row regardless of how many rows of tags each card carries. Descriptors set `text-wrap: balance` to stop two-line descriptors orphaning their last word.
 
+The workspace inverts the model: instead of a centered column on a scrolling page, it is a viewport-height flex column that never scrolls — a 44px bar of fixed height over a stage that takes everything else. The generated page gets the entire remainder, and the inspector takes its 320px out of the stage's width rather than covering it.
+
+### Named Rules
+
+**The Scaled, Not Reflowed Rule.** Wherever a generated page is previewed inside this interface — the studio's comparison tiles and the workspace stage — the frame is rendered at its own full width (1440px) and scaled down with a transform. It is never given a narrow viewport and allowed to reflow. A design squeezed into a tile is a lie about the design being picked.
+
 ## Elevation & Depth
 
 Flat by default. There are no shadows on cards, chips, tags, or buttons at any state. Depth is created by exactly two devices: a 1px border in either rule or ink weight, and the two-step tonal lift from paper to raised paper.
 
-The only exceptions are the two modal surfaces — the detail overlay and the studio viewer — which sit above a translucent ink scrim and carry one ambient shadow to separate them from the page beneath.
+The only exceptions are the two modal surfaces — the detail sheet and the studio viewer — which sit above a translucent ink scrim and carry one ambient shadow to separate them from the page beneath. The workspace's inspector and comment composer float over a page too, and deliberately take no shadow: they are docked apparatus, and they separate themselves with an ink border instead.
 
 ### Shadow Vocabulary
 
-- **Overlay** (`box-shadow: 0 24px 80px rgba(23, 21, 15, 0.28)`): The detail overlay and the studio viewer. Never used on anything that is not modal.
+- **Overlay** (`box-shadow: 0 24px 80px rgba(23, 21, 15, 0.28)`): The detail sheet and the studio viewer. Never used on anything that is not modal.
 
 ### Named Rules
 
@@ -228,8 +299,8 @@ Borders are always exactly 1px. Weight is expressed through color (rule vs. ink)
 ### Chips (group filters)
 
 - **Character:** Cut from the page, not placed on it.
-- **Style:** Paper fill, 1px ink border, square corners, label typography, 10px/14px padding. Label and count sit on one line with the count in soft ink.
-- **Active:** Fill inverts to the group's ink (or to ink for `ALL`), text to paper, count to paper at 60% opacity.
+- **Style:** Paper fill, 1px ink border, square corners, label typography, 11px/14px padding. A 6px group diamond, the label, and the count sit on one line with a 10px gap, the count in soft ink at weight 400.
+- **Active:** Fill *and* border invert to the group's ink (or to ink for `ALL`), text to paper, count to paper at 62% opacity, diamond to paper. Hovering an active chip changes nothing — it is already at its end state.
 - **Hover:** Background shifts to raised paper; border stays. No movement, no shadow.
 - **Focus:** 2px ink outline offset 2px.
 
@@ -246,18 +317,34 @@ Borders are always exactly 1px. Weight is expressed through color (rule vs. ink)
 - **Shadow:** None at any state (see Elevation).
 - **Structure:** Screenshot fills a fixed 4:3 area anchored to the top edge so hero compositions read correctly; a caption block below carries title and descriptor on one line, tags beneath, and a footer row with the group diamond plus group name on the left and the `NN / TT` index on the right.
 - **Internal Padding:** 16px on the caption block; the image bleeds to the card edge.
+- **Draft:** An entry captured but not yet reviewed. The border goes dashed in soft ink and the plate drops to 86% opacity; the index slot swaps its number for the word `DRAFT` at the label step. Dashed reads as "not set yet" in a system where every other border is a solid hairline, so no badge is needed.
+- **Arrival:** An entry that appeared while you were looking elsewhere runs one 2000ms pass — border in the group's own ink, background at page paper — settling back to rule and raised paper. No toast, no movement, nothing to dismiss. This is the only animation in the system that carries color.
 
 ### Inputs
 
-- **Style:** Transparent fill, 1px rule bottom border only, meta typography, no top/side borders.
-- **Focus:** Bottom border thickens to ink; no glow, no ring shift.
-- **Placeholder:** Soft ink.
+- **Style:** Transparent fill, 1px rule bottom border only, no top or side borders. Body typography in the library's forms, meta typography in the inspector.
+- **Focus:** Bottom border goes to ink and thickens to 2px, with the bottom padding reduced by 1px so nothing below it shifts.
+- **Placeholder:** Soft ink at 70% opacity.
+- **Select:** The one input with a full box — 1px rule on all four sides, 8px/10px padding — because a dropdown must read as pressable, and a single underline does not.
+
+### Buttons
+
+- **Style:** Paper fill, 1px ink border, label typography, 11px/14px padding. Hover lifts the fill to raised paper; the border never moves.
+- **Solid:** Ink fill, paper text, for the one committing action in a view. Hover softens the fill to soft ink rather than darkening it — there is nothing darker than ink.
+- **Quiet:** Rule border and soft-ink text, going to ink on both at hover. For actions that must be reachable but not counted.
 
 ### Copy Buttons
 
 - **Character:** The signature interaction; this library exists to hand text to the clipboard.
-- **Style:** Paper fill, 1px ink border, label typography.
+- **Style:** Raised-paper fill against the artifact block's paper ground — the one button that sits lighter than its surroundings — with a 1px ink border, label typography, 8px/12px padding, and an 88px minimum width so the label change does not resize it.
 - **Done state:** The button inverts to ink fill with paper text and the label changes to `COPIED`, holding for 1.4s before returning. The state is expressed in the system's own vocabulary — no toast, no floating notification, no icon.
+
+### Artifact Blocks
+
+- **Character:** The unit the library actually delivers. Recipe, copy brief, and image prompt are each one block, and the whole detail sheet exists to hand them over.
+- **Style:** Paper fill inside the raised-paper sheet, 1px rule border, square. A ruled head carries the label in soft ink at 0.14em tracking with the copy button to its right; the body is body typography at `pre-wrap`, capped at 68ch.
+- **Disclosure:** The entire label row is the toggle and the copy button sits outside it, so a block can be copied without being read. Closed, the head loses its bottom border and the block collapses to a single ruled line.
+- **Empty:** An unwritten artifact renders `Not written yet.` in soft-ink italic rather than collapsing, so a missing artifact is visible instead of absent.
 
 ### Detail Sheet
 
@@ -341,7 +428,27 @@ Borders are always exactly 1px. Weight is expressed through color (rule vs. ink)
 - **Comment pins:** a 20px ink square carrying the comment's number, straddling
   the top-left corner of the element it marks so it never covers it — the same
   `-10px` corner idiom as the sheet's close control. Pins show whenever the
-  page is being looked at and disappear while presenting.
+  page is being looked at and disappear while presenting. A pin scrolled out of
+  the stage is hidden outright rather than clamped to the edge: a marker pinned
+  to nothing is worse than no marker.
+
+### Comment Composer (Studio)
+
+- **Character:** A slip of paper laid on the page, not a chat panel. It opens
+  where the work is and closes when the note is written.
+- **Shape:** 300px pinned 16px in from the stage's top-right corner, raised
+  paper, 1px ink border, square. It caps at the stage height and its thread
+  scrolls; below `700px` it stretches to both gutters instead of shrinking.
+- **Head:** the marked element's name in label typography, soft ink, truncated
+  with an ellipsis rather than wrapped — the head is one line by construction.
+- **Notes:** each a ruled block with the comment at 12px and a footer carrying
+  its number and a `DROP` control in label typography, underlined on hover.
+  The empty thread is removed, not shown as an empty state; a composer with no
+  notes yet is just the field.
+- **Field:** the one boxed textarea in the system — paper fill, 1px rule on all
+  four sides going to ink on focus. It is boxed because it floats over an
+  invented page whose own background is unknown, and an underline alone would
+  disappear against it.
 
 ### Inspector Panel (Studio)
 
@@ -368,27 +475,64 @@ Borders are always exactly 1px. Weight is expressed through color (rule vs. ink)
   reads on any ground the generator invented, and an ink badge naming the
   element in label typography. Hover is the same rectangle in a dashed hairline.
 
+### Blank States and Notices
+
+- **Blank state:** A 720px centered column with 64px of vertical air — the one
+  place in the interface that is deliberately not dense. A serif heading at 2rem
+  over a 52ch paragraph in soft ink, with any command set as inline code: raised
+  paper, 1px rule, 2px/6px padding. It reads as a colophon note, not an error.
+- **Notice** (server unreachable): a full-width raised-paper block with a 1px
+  **ink** border at 12px, directly under the masthead. Ink rather than rule
+  because this is the one message that changes what the interface can do —
+  edits will not persist — and it must outrank every hairline on the page.
+- **Draft notice:** the same block in a dashed soft-ink border, matching the
+  dashed border of the draft cards it is describing. The state and its
+  explanation share one vocabulary.
+- **Errors state themselves in place.** A failed step's own note goes from soft
+  ink to full ink and says what happened, in the position the result would have
+  occupied. There is no toast, no banner, and no floating notification anywhere
+  in this system.
+
+### Colophon
+
+The page's last line: a full-width row above the bottom gutter, separated by a
+1px rule, set entirely in label typography in soft ink and split left-to-right.
+It carries what the page is and what it holds — never navigation. A footer that
+tries to be useful is a footer that has become a menu.
+
 ### Signature Component: The Group Diamond
 
-A 6px ink-filled square rotated 45°, always followed by the group name in label typography. It appears on every card footer, in the detail overlay header, and inside active chips. It is the system's only ornament and the only place group ink touches the page outside of chip fills.
+A 6px ink-filled square rotated 45°, always followed by the group name in label typography. It appears on every card footer, in the detail overlay header, and inside active chips. It is the system's only ornament and the only place group ink touches the page outside of chip fills and the arrival pass.
+
+### Named Rules
+
+**The One Easing Rule.** Every state change in the interface is 140ms on `cubic-bezier(0.2, 0, 0, 1)`, and it animates color only — background, border-color, text color, opacity. Nothing in this system moves, scales, or slides on hover. The three durations longer than 140ms each buy something specific and nothing else may claim one: the copy button's 1.4s hold, the card's 2s arrival, and the 2.6s plate scan that stands in for a spinner.
+
+**The Reduced Motion Rule.** Under `prefers-reduced-motion: reduce` every animation and transition collapses to `0.01ms`. Because the system animates color rather than position, nothing is lost when it does — every state is still fully legible at its end value.
 
 ## Do's and Don'ts
 
 ### Do:
 
 - **Do** keep border radius at `0` on every element, without exception.
-- **Do** give every group exactly one ink and reuse it in all three sanctioned places.
+- **Do** give every group exactly one ink and reuse it in all four sanctioned places.
 - **Do** use `tabular-nums` on every number that can change.
-- **Do** express hover as a border-color and tonal change only.
+- **Do** express hover as a border-color and tonal change only, at 140ms.
 - **Do** let the screenshot bleed to the card's edge; the image is the content, the caption is the apparatus.
 - **Do** keep the chip bar fully visible and wrapping, never horizontally scrolling.
+- **Do** say what went wrong in the place the result would have been, in full ink.
+- **Do** render generated pages at 1440px and scale them down; never let a preview reflow.
+- **Do** reach for a dashed hairline when something is provisional — draft, hover, unresolved.
 
 ### Don't:
 
 - **Don't** introduce a sans-serif. The system has exactly two faces.
-- **Don't** add a shadow to any element except the detail overlay.
+- **Don't** add a shadow to any element except the detail sheet and the studio viewer.
 - **Don't** use pure white (`#FFF`) or pure black (`#000`) anywhere.
 - **Don't** use a chromatically neutral grey; every neutral carries a warm cast.
-- **Don't** let group ink touch body text, borders, or backgrounds outside the three sanctioned uses.
+- **Don't** let group ink touch body text, borders, or backgrounds outside the four sanctioned uses.
 - **Don't** replace the grid with masonry; equal-height rows exist so treatments can be compared across a row.
-- **Don't** show copy confirmation as a toast or floating notification.
+- **Don't** show copy confirmation — or any other feedback — as a toast or floating notification.
+- **Don't** animate position, scale, or elevation. Color and opacity are the only properties that move.
+- **Don't** box an input. The underline is the field; the two exceptions (the select, the comment textarea) each earned it and are named in Components.
+- **Don't** use an icon font or an emoji as an icon. Icons are inline SVG at 13px, 1.3px stroke, `currentColor`.
