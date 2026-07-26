@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-26T01:37:13.623Z",
+  "generatedAt": "2026-07-26T10:19:34.236Z",
   "title": "Design System: Website Inspo Library",
   "extensions": {
     "colorMeta": {
@@ -232,6 +232,10 @@
       "meta": {
         "displayName": "Meta",
         "purpose": "Tags, descriptors, counts, NN/TT indices."
+      },
+      "brief": {
+        "displayName": "Brief",
+        "purpose": "The studio's brief field, and nothing else. The only serif in the system you can type into."
       }
     },
     "shadows": [
@@ -345,14 +349,6 @@
       "css": ".ds-tile-wait{display:flex;flex-direction:column;background:#FAF8F2;border:1px solid #D8D2C2;border-radius:0;max-width:520px}.ds-tile-scan{position:relative;aspect-ratio:16/10;background:#F2EFE6;display:grid;place-items:center;padding:24px;overflow:hidden}.ds-tile-scan::after{content:\"\";position:absolute;left:0;right:0;top:0;height:1px;background:#6B6455;animation:ds-plate-scan 2600ms cubic-bezier(.2,0,0,1) infinite}@keyframes ds-plate-scan{0%{transform:translateY(0);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translateY(100%);opacity:0}}.ds-tile-angle{margin:0;max-width:48ch;font:400 12px/1.55 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#6B6455;text-align:center}@media (prefers-reduced-motion:reduce){.ds-tile-scan::after{animation-duration:.01ms}}"
     },
     {
-      "name": "Reference Card",
-      "kind": "card",
-      "refersTo": "card",
-      "description": "A miniature of the grid card, used in the studio’s selected-references strip. Its remove control mirrors the detail sheet’s close: a square cut into the top-right corner at -1px.",
-      "html": "<article class=\"ds-ref\"><div class=\"ds-ref-plate\"></div><div class=\"ds-ref-cap\"><p class=\"ds-ref-title\">Vaulk</p><p class=\"ds-ref-desc\">cinematic architecture photography x tactical viewfinder chrome</p></div><button class=\"ds-ref-drop\" aria-label=\"Remove Vaulk\">×</button></article>",
-      "css": ".ds-ref{position:relative;display:flex;flex-direction:column;background:#FAF8F2;border:1px solid #D8D2C2;border-radius:0;transition:border-color 140ms cubic-bezier(.2,0,0,1);width:180px}.ds-ref:hover{border-color:#17150F}.ds-ref-plate{aspect-ratio:4/3;background:#F2EFE6;border-bottom:1px solid #D8D2C2}.ds-ref-cap{padding:10px 12px;display:flex;flex-direction:column;gap:3px}.ds-ref-title{margin:0;font:400 15px/1.15 \"Libre Caslon Display\",Georgia,serif;color:#17150F}.ds-ref-desc{margin:0;font:400 11px/1.35 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#6B6455;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.ds-ref-drop{position:absolute;top:-1px;right:-1px;width:26px;height:26px;display:grid;place-items:center;font:400 15px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#17150F;background:#FAF8F2;border:1px solid #D8D2C2;border-radius:0;cursor:pointer;opacity:0;transition:opacity 140ms cubic-bezier(.2,0,0,1),background 140ms cubic-bezier(.2,0,0,1)}.ds-ref:hover .ds-ref-drop,.ds-ref-drop:focus-visible{opacity:1}.ds-ref-drop:hover{background:#17150F;color:#F2EFE6;border-color:#17150F}"
-    },
-    {
       "name": "Copy Button",
       "kind": "button",
       "refersTo": "button-copy",
@@ -363,7 +359,7 @@
     {
       "name": "Artifact Block",
       "kind": "custom",
-      "refersTo": "card",
+      "refersTo": "artifact",
       "description": "Holds one of the three artifacts (recipe, copy brief, image prompt) with its own copy action, so a block can be copied without being read.",
       "html": "<section class=\"ds-artifact\"><div class=\"ds-artifact-head\"><span class=\"ds-artifact-label\">Image recipe</span><button class=\"ds-copy\">COPY</button></div><p class=\"ds-artifact-text\">Warm paper ground with a halftone CMYK dot field anchoring the right third.</p></section>",
       "css": ".ds-artifact{border:1px solid #D8D2C2;background:#F2EFE6;max-width:560px}.ds-artifact-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 16px;border-bottom:1px solid #D8D2C2}.ds-artifact-label{font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#6B6455}.ds-artifact-text{margin:0;padding:16px;font:400 13px/1.6 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;max-width:68ch;color:#17150F}"
@@ -371,10 +367,34 @@
     {
       "name": "Field",
       "kind": "input",
-      "refersTo": "chip",
+      "refersTo": "field",
       "description": "Underline-only input. Focus thickens the rule to ink; no ring, no glow. The studio brief is the one field set in the serif — see The Brief Is Prose Rule.",
       "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Filter</span><input placeholder=\"name, tag, recipe…  ( / )\"></label><label class=\"ds-field ds-field-brief\"><span class=\"ds-field-label\">One sentence is enough</span><input placeholder=\"a landing page for a small-batch coffee roaster\"></label>",
       "css": ".ds-field{display:block;margin-bottom:24px}.ds-field-label{display:block;font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#6B6455;margin-bottom:4px}.ds-field input{font:400 13px/1.6 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#17150F;background:transparent;border:0;border-bottom:1px solid #D8D2C2;border-radius:0;padding:6px 0;width:100%;min-width:240px}.ds-field input::placeholder{color:#6B6455;opacity:.7}.ds-field input:focus{outline:none;border-bottom-color:#17150F;border-bottom-width:2px;padding-bottom:5px}.ds-field-brief input{font:400 20px/1.35 \"Libre Caslon Display\",Georgia,serif;padding-bottom:10px}"
+    },
+    {
+      "name": "Workspace Button",
+      "kind": "button",
+      "refersTo": "workspace-button",
+      "description": "The workspace bar's whole control vocabulary. 26px tall, rule border going to ink on hover, inverting to ink fill when pressed or open. Icons are inline SVG in currentColor so they invert with the button.",
+      "html": "<div class=\"ds-ws-row\"><button class=\"ds-ws-btn ds-ws-btn-icon\" title=\"Reload\"><svg viewBox=\"0 0 24 24\"><path d=\"M20 11A8 8 0 1 0 18.6 16\"/><path d=\"M20 5v6h-6\"/></svg></button><button class=\"ds-ws-btn\" aria-expanded=\"false\">FINAL<svg class=\"ds-ws-caret\" viewBox=\"0 0 24 24\"><path d=\"M6 9l6 6 6-6\"/></svg></button><button class=\"ds-ws-btn\" aria-pressed=\"true\"><svg viewBox=\"0 0 24 24\"><path d=\"M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z\"/></svg>COMMENT<span class=\"ds-ws-count\">3</span></button></div>",
+      "css": ".ds-ws-row{display:flex;align-items:center;gap:8px;height:44px;padding:0 16px;background:#F2EFE6;border-bottom:1px solid #17150F}.ds-ws-btn{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#17150F;background:#F2EFE6;border:1px solid #D8D2C2;border-radius:0;cursor:pointer;white-space:nowrap}.ds-ws-btn:hover{border-color:#17150F;background:#FAF8F2}.ds-ws-btn:focus-visible{outline:2px solid #17150F;outline-offset:2px}.ds-ws-btn[aria-pressed=\"true\"],.ds-ws-btn[aria-expanded=\"true\"]{background:#17150F;color:#F2EFE6;border-color:#17150F}.ds-ws-btn-icon{width:26px;padding:0;justify-content:center}.ds-ws-btn svg{width:13px;height:13px;stroke:currentColor;stroke-width:1.3;fill:none}.ds-ws-caret{width:9px;height:9px;opacity:.7}.ds-ws-count{color:#6B6455;font-variant-numeric:tabular-nums}.ds-ws-btn[aria-pressed=\"true\"] .ds-ws-count{color:#F2EFE6;opacity:.62}"
+    },
+    {
+      "name": "Inspector Field",
+      "kind": "input",
+      "refersTo": "inspector-field",
+      "description": "The inspector's property row. A placeholder is what the page computed, in soft ink; a value you typed is ink at weight 500. That contrast is the field's only state, and it is how you see which properties you have taken over.",
+      "html": "<div class=\"ds-insp\"><p class=\"ds-insp-group\">Colour</p><div class=\"ds-insp-pair\"><span class=\"ds-insp-f\"><span class=\"ds-insp-label\">Text</span><span class=\"ds-insp-colour\"><input class=\"ds-insp-swatch\" type=\"color\" value=\"#17150F\"><input value=\"#17150F\" placeholder=\"#17150F\"></span></span><span class=\"ds-insp-f\"><span class=\"ds-insp-label\">Background</span><span class=\"ds-insp-colour\"><input class=\"ds-insp-swatch\" type=\"color\" value=\"#F2EFE6\"><input placeholder=\"rgb(242, 239, 230)\"></span></span></div></div>",
+      "css": ".ds-insp{background:#FAF8F2;border:1px solid #17150F;padding:12px 16px 16px;font-family:\"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;width:320px;max-width:100%;box-sizing:border-box}.ds-insp-group{margin:0 0 8px;font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#17150F}.ds-insp-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}.ds-insp-f{display:flex;flex-direction:column;gap:3px;min-width:0}.ds-insp-label{font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#6B6455}.ds-insp-colour{display:flex;align-items:center;gap:8px;min-width:0}.ds-insp-f input{width:100%;min-width:0;padding:3px 0;font:400 12px/1.3 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.02em;color:#17150F;background:none;border:0;border-bottom:1px solid #D8D2C2;border-radius:0}.ds-insp-f input:focus{outline:none;border-bottom-color:#17150F}.ds-insp-f input::placeholder{color:#6B6455;opacity:.7}.ds-insp-f input:not(:placeholder-shown){color:#17150F;font-weight:500}.ds-insp-f input.ds-insp-swatch{flex:none;width:20px;height:20px;padding:0;border:1px solid #D8D2C2;background:none;cursor:pointer;appearance:none;-webkit-appearance:none}.ds-insp-swatch::-webkit-color-swatch-wrapper{padding:0}.ds-insp-swatch::-webkit-color-swatch{border:0}"
+    },
+    {
+      "name": "Comment Pin",
+      "kind": "custom",
+      "refersTo": "comment-pin",
+      "description": "Drawn into the generated page itself. The selection rectangle carries a paper halo so it reads on any ground the generator invented, with an ink badge naming the element; hover is the same rectangle in a dashed hairline. A comment pin straddles the top-left corner of the element it marks so it never covers it.",
+      "html": "<div class=\"ds-pinstage\"><div class=\"ds-pinsel\"><span class=\"ds-pinbadge\">Section.hero</span><div class=\"ds-pinchild\"><button class=\"ds-pin\">2</button></div></div></div>",
+      "css": ".ds-pinstage{position:relative;padding:34px 24px 24px;background:#FAF8F2}.ds-pinsel{position:relative;padding:26px 22px;border:1px solid #17150F;box-shadow:0 0 0 1px rgba(242,239,230,.7)}.ds-pinbadge{position:absolute;left:0;top:-18px;font:500 10px/1.7 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;background:#17150F;color:#F2EFE6;padding:1px 6px;white-space:nowrap}.ds-pinchild{position:relative;height:56px;border:1px dashed rgba(23,21,15,.5)}.ds-pin{position:absolute;left:-10px;top:-10px;min-width:20px;height:20px;padding:0 5px;border:1px solid #F2EFE6;background:#17150F;color:#F2EFE6;font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;border-radius:0;cursor:pointer}"
     }
   ],
   "narrative": {
@@ -385,7 +405,8 @@
       "Zero border radius anywhere; printed matter has cut edges",
       "Monospace for all apparatus, high-contrast serif for all names",
       "Flat by default: depth comes from border weight and tonal layering, not shadow",
-      "One saturated ink per group, used structurally and sparingly"
+      "One saturated ink per group, used structurally and sparingly",
+      "Color is the only thing that animates; nothing moves, slides, or lifts on hover"
     ],
     "rules": [
       {
@@ -405,7 +426,7 @@
       },
       {
         "name": "The Brief Is Prose Rule",
-        "body": "Every input in the library is a field and is set in mono. The studio’s brief is the one exception: it is a sentence a person writes, not a value they enter, so it is set in the serif. Nothing else that accepts typing may be.",
+        "body": "Every input in the library is a field and is set in mono. The studio's brief is the one exception: it is a sentence a person writes, not a value they enter, so it is set in the serif. Nothing else that accepts typing may be.",
         "section": "typography"
       },
       {
@@ -414,27 +435,48 @@
         "section": "typography"
       },
       {
+        "name": "The Scaled, Not Reflowed Rule",
+        "body": "Wherever a generated page is previewed inside this interface — the studio's comparison tiles and the workspace stage — the frame is rendered at its own full width (1440px) and scaled down with a transform. It is never given a narrow viewport and allowed to reflow. A design squeezed into a tile is a lie about the design being picked.",
+        "section": "layout"
+      },
+      {
         "name": "The Flat Page Rule",
         "body": "If an element needs a shadow to be legible, its border weight is wrong. Hover states change border color and tonal value, never elevation.",
         "section": "elevation"
+      },
+      {
+        "name": "The One Easing Rule",
+        "body": "Every state change in the interface is 140ms on cubic-bezier(0.2, 0, 0, 1), and it animates color only — background, border-color, text color, opacity. Nothing in this system moves, scales, or slides on hover. The three durations longer than 140ms each buy something specific and nothing else may claim one: the copy button's 1.4s hold, the card's 2s arrival, and the 2.6s plate scan that stands in for a spinner.",
+        "section": "components"
+      },
+      {
+        "name": "The Reduced Motion Rule",
+        "body": "Under prefers-reduced-motion: reduce every animation and transition collapses to 0.01ms. Because the system animates color rather than position, nothing is lost when it does — every state is still fully legible at its end value.",
+        "section": "components"
       }
     ],
     "dos": [
       "Do keep border radius at 0 on every element, without exception.",
-      "Do give every group exactly one ink and reuse it in all three sanctioned places.",
+      "Do give every group exactly one ink and reuse it in all four sanctioned places.",
       "Do use tabular-nums on every number that can change.",
-      "Do express hover as a border-color and tonal change only.",
-      "Do let the screenshot bleed to the card’s edge; the image is the content, the caption is the apparatus.",
-      "Do keep the chip bar fully visible and wrapping, never horizontally scrolling."
+      "Do express hover as a border-color and tonal change only, at 140ms.",
+      "Do let the screenshot bleed to the card's edge; the image is the content, the caption is the apparatus.",
+      "Do keep the chip bar fully visible and wrapping, never horizontally scrolling.",
+      "Do say what went wrong in the place the result would have been, in full ink.",
+      "Do render generated pages at 1440px and scale them down; never let a preview reflow.",
+      "Do reach for a dashed hairline when something is provisional — draft, hover, unresolved."
     ],
     "donts": [
-      "Don’t introduce a sans-serif. The system has exactly two faces.",
-      "Don’t add a shadow to any element except the detail overlay.",
-      "Don’t use pure white (#FFF) or pure black (#000) anywhere.",
-      "Don’t use a chromatically neutral grey; every neutral carries a warm cast.",
-      "Don’t let group ink touch body text, borders, or backgrounds outside the three sanctioned uses.",
-      "Don’t replace the grid with masonry; equal-height rows exist so treatments can be compared across a row.",
-      "Don’t show copy confirmation as a toast or floating notification."
+      "Don't introduce a sans-serif. The system has exactly two faces.",
+      "Don't add a shadow to any element except the detail sheet and the studio viewer.",
+      "Don't use pure white (#FFF) or pure black (#000) anywhere.",
+      "Don't use a chromatically neutral grey; every neutral carries a warm cast.",
+      "Don't let group ink touch body text, borders, or backgrounds outside the four sanctioned uses.",
+      "Don't replace the grid with masonry; equal-height rows exist so treatments can be compared across a row.",
+      "Don't show copy confirmation — or any other feedback — as a toast or floating notification.",
+      "Don't animate position, scale, or elevation. Color and opacity are the only properties that move.",
+      "Don't box an input. The underline is the field; the two exceptions (the select, the comment textarea) each earned it and are named in Components.",
+      "Don't use an icon font or an emoji as an icon. Icons are inline SVG at 13px, 1.3px stroke, currentColor."
     ]
   }
 }
