@@ -1,0 +1,11 @@
+.DS_Store
+.gstack/
+*.tmp
+data.json.*.tmp
+.capture.lock
+watcher/*.log
+
+# Machine-local tool state. design.json is the shared design sidecar and stays.
+.impeccable/hook.cache.json
+.impeccable/config.local.json
+.impeccable/questions/
