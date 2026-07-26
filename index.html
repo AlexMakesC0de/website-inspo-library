@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<!--
+  DIRECTION CONTRACT — Website Inspo Library
+
+  THESIS: An index of designs you love, set as printed matter, where every number
+  on the page is live data. Refuses the masonry moodboard the category always ships.
+
+  OWN-WORLD: Warm off-white stock (#F2EFE6), warm near-black ink, 1px hairline rules,
+  zero radius anywhere. Two voices only — Libre Caslon Display names things, Sometype Mono
+  measures them. Eight spot printing inks, one per group, the only chroma the chrome
+  is allowed. Flat: depth is border weight and a two-step tonal lift, never shadow.
+
+  STORY: You arrive mid-build, scan a ruled grid of plates, filter to a treatment by
+  its ink, open one, and leave with its recipe on your clipboard.
+
+  FIRST VIEWPORT: Masthead over a full-width rule; a wrapping bar of bordered chips
+  carrying live counts; then a 3-column grid of equal-height plates, each captioned
+  with a serif name, mono tags, an ink diamond, and its NN / TT position in the
+  current filter. Primary action is the plate itself.
+
+  FORM: Foundry-index rendition of a user-pinned world. Grounded candidate 5,
+  seed key 262ff571 — superseded by the user's explicit pin of the reference's
+  light paper theme, which beats the roll.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Website Inspo Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Sometype+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<a class="skip" href="#grid">Skip to index</a>
+
+<header class="masthead">
+  <div class="masthead__id">
+    <h1 class="masthead__title">Website Inspo Library</h1>
+    <p class="masthead__sub" id="mastheadSub">Property from the collection of <span id="ownerName">—</span></p>
+  </div>
+  <div class="masthead__tools">
+    <label class="field" for="q">
+      <span class="field__label">Filter</span>
+      <input id="q" type="search" autocomplete="off" spellcheck="false"
+             placeholder="name, tag, recipe…  ( / )">
+    </label>
+    <button class="btn btn--solid" id="addBtn" type="button">Add entry</button>
+  </div>
+</header>
+
+<hr class="rule">
+
+<nav class="tabs" id="tabs" aria-label="Sections">
+  <button class="tab" type="button" data-view="library" aria-selected="true">Library</button>
+  <button class="tab" type="button" data-view="studio" aria-selected="false">Studio</button>
+</nav>
+
+<hr class="rule">
+
+<main id="main">
+
+  <div id="viewLibrary">
+    <nav class="chips" id="chips" aria-label="Filter by design group"></nav>
+
+    <hr class="rule">
+
+    <div id="grid" class="grid" tabindex="-1" aria-live="polite"></div>
+
+    <section class="blank" id="blank" hidden></section>
+  </div>
+
+
+  <!-- ─── STUDIO ───────────────────────────────────────────────────────── -->
+  <div id="viewStudio" class="studio" hidden>
+
+    <section class="studio__step" id="stepBrief">
+      <div class="studio__stepHead">
+        <span class="studio__mark">01</span>
+        <h2 class="studio__stepTitle">The brief</h2>
+      </div>
+      <form id="briefForm" class="studio__briefForm">
+        <label class="field field--block" for="briefText">
+          <span class="field__label">One sentence is enough</span>
+          <textarea id="briefText" rows="2" spellcheck="false"
+                    placeholder="a landing page for a small-batch coffee roaster that only sells one bean at a time"></textarea>
+        </label>
+        <div class="studio__row">
+          <button class="btn btn--solid" type="submit" id="briefGo">Find references</button>
+          <p class="studio__note" id="briefNote">
+            The library is searched for what fits, then you adjust before anything is generated.
+          </p>
+        </div>
+      </form>
+      <div class="studio__recent" id="studioRecent" hidden></div>
+    </section>
+
+
+    <section class="studio__step" id="stepRefs" hidden>
+      <div class="studio__stepHead">
+        <span class="studio__mark">02</span>
+        <h2 class="studio__stepTitle">References</h2>
+        <span class="studio__count" id="refCount"></span>
+      </div>
+      <p class="studio__note">
+        Character, principles and moves only — never layout. Each variant reads
+        this set differently, and none of them may reproduce one.
+      </p>
+
+      <div class="refstrip" id="refStrip"></div>
+
+      <div class="studio__row studio__row--wrap">
+        <label class="field" for="refSearch">
+          <span class="field__label">Add a reference</span>
+          <input id="refSearch" type="search" autocomplete="off" spellcheck="false"
+                 placeholder="tag, treatment, name…">
+        </label>
+        <div class="refresults" id="refResults"></div>
+      </div>
+
+      <div class="studio__row">
+        <button class="btn btn--solid" type="button" id="generateBtn">Generate 4 concepts</button>
+        <p class="studio__note" id="generateNote">Four complete pages, in parallel. Roughly two minutes.</p>
+      </div>
+    </section>
+
+
+    <section class="studio__step" id="stepG1" hidden>
+      <div class="studio__stepHead">
+        <span class="studio__mark">03</span>
+        <h2 class="studio__stepTitle">Concepts</h2>
+        <span class="studio__count" id="g1Count"></span>
+        <button class="btn btn--quiet studio__reroll" type="button" data-gen="1">Re-roll</button>
+      </div>
+      <p class="studio__note">
+        Four different structural theses on the same brief. Pick the one that is
+        closest — not the one that is finished.
+      </p>
+      <div class="board" id="g1Board"></div>
+    </section>
+
+
+    <section class="studio__step" id="stepG2" hidden>
+      <div class="studio__stepHead">
+        <span class="studio__mark">04</span>
+        <h2 class="studio__stepTitle">Worlds</h2>
+        <span class="studio__count" id="g2Count"></span>
+        <button class="btn btn--quiet studio__reroll" type="button" data-gen="2">Re-roll</button>
+      </div>
+      <p class="studio__note">
+        Same layout, same words, four different visual worlds. Type, colour,
+        texture and motion only.
+      </p>
+      <div class="board" id="g2Board"></div>
+    </section>
+
+
+    <section class="studio__step studio__final" id="stepFinal" hidden>
+      <div class="studio__stepHead">
+        <span class="studio__mark">05</span>
+        <h2 class="studio__stepTitle">Final</h2>
+      </div>
+      <div id="finalBody"></div>
+    </section>
+
+  </div>
+
+</main>
+
+<footer class="colophon">
+  <span id="colophonCount">—</span>
+  <span>Set in Libre Caslon Display &amp; Sometype Mono</span>
+</footer>
+
+
+<!-- ─── DETAIL ─────────────────────────────────────────────────────────── -->
+<dialog class="sheet" id="detail" aria-labelledby="detailTitle">
+  <button class="sheet__close" id="detailClose" type="button" aria-label="Close">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2 L14 14 M14 2 L2 14"/></svg>
+  </button>
+
+  <div class="sheet__body">
+    <div class="sheet__head">
+      <p class="sheet__group" id="detailGroup"></p>
+      <h2 class="sheet__title" id="detailTitle"></h2>
+      <p class="sheet__desc" id="detailDesc"></p>
+      <p class="sheet__meta">
+        <a id="detailUrl" class="link" href="#" target="_blank" rel="noopener noreferrer"></a>
+        <span class="sheet__index" id="detailIndex"></span>
+      </p>
+    </div>
+
+    <div class="sheet__left">
+      <figure class="plate" id="detailPlate"></figure>
+      <div class="sheet__tags" id="detailTags"></div>
+    </div>
+
+    <div class="sheet__right">
+      <p class="draft-notice" id="draftNotice" hidden>
+        <strong>Draft — captured, not reviewed.</strong>
+        Claude wrote this from the screenshot and proposed the group. Add the
+        source URL, correct anything wrong, then approve it. Drafts stay out of
+        search, so Claude won’t cite this until you do.
+      </p>
+
+      <div class="artifacts" id="detailArtifacts"></div>
+
+      <div class="sheet__actions">
+        <button class="btn btn--solid" id="approveBtn" type="button" hidden>Approve entry</button>
+        <button class="btn" id="editBtn" type="button">Edit entry</button>
+        <button class="btn btn--quiet" id="deleteBtn" type="button">Delete</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+
+<!-- ─── VIEWER ─────────────────────────────────────────────────────────── -->
+<dialog class="viewer" id="viewer" aria-labelledby="viewerTitle">
+  <button class="sheet__close" id="viewerClose" type="button" aria-label="Close">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2 L14 14 M14 2 L2 14"/></svg>
+  </button>
+
+  <header class="viewer__head">
+    <div class="viewer__id">
+      <p class="viewer__key" id="viewerKey"></p>
+      <h2 class="viewer__title" id="viewerTitle"></h2>
+      <p class="viewer__world" id="viewerWorld"></p>
+    </div>
+    <div class="viewer__actions">
+      <button class="btn btn--solid" id="viewerPick" type="button">Pick this one</button>
+      <button class="btn" id="viewerWorkspace" type="button">Open workspace</button>
+      <a class="btn" id="viewerOpen" href="#" target="_blank" rel="noopener">Open in a tab</a>
+    </div>
+  </header>
+
+  <div class="viewer__sources" id="viewerSources"></div>
+
+  <iframe class="viewer__frame" id="viewerFrame" title="Generated page" sandbox="allow-scripts"></iframe>
+</dialog>
+
+
+<!-- ─── EDITOR ─────────────────────────────────────────────────────────── -->
+<dialog class="sheet sheet--form" id="editor" aria-labelledby="editorTitle">
+  <button class="sheet__close" id="editorClose" type="button" aria-label="Close">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2 L14 14 M14 2 L2 14"/></svg>
+  </button>
+
+  <form class="sheet__body" id="editorForm">
+    <h2 class="sheet__title" id="editorTitle">New entry</h2>
+    <p class="sheet__desc">Fields Claude fills at capture. Edit anything here; it writes straight to data.json.</p>
+
+    <div class="fieldset">
+      <label class="field field--block"><span class="field__label">Title</span>
+        <input name="title" required placeholder="Stillpage"></label>
+      <label class="field field--block"><span class="field__label">Descriptor</span>
+        <input name="descriptor" placeholder="warm editorial x print DNA"></label>
+    </div>
+
+    <div class="fieldset">
+      <label class="field field--block"><span class="field__label">Source URL</span>
+        <input name="url" type="url" placeholder="https://"></label>
+      <label class="field field--block"><span class="field__label">Group</span>
+        <select name="group" id="editorGroup"></select></label>
+    </div>
+
+    <label class="field field--block"><span class="field__label">Screenshot</span>
+      <select name="screenshot" id="editorShot"></select></label>
+
+    <label class="field field--block"><span class="field__label">Tags — one per line, six minimum</span>
+      <textarea name="tags" rows="6" placeholder="halftone CMYK dot texture&#10;warm paper ground&#10;mono coordinate labels"></textarea></label>
+
+    <label class="field field--block"><span class="field__label">Image recipe — how the visual is constructed</span>
+      <textarea name="recipe" rows="5"></textarea></label>
+
+    <label class="field field--block"><span class="field__label">Copy brief — how the words work</span>
+      <textarea name="copyBrief" rows="5"></textarea></label>
+
+    <label class="field field--block"><span class="field__label">Asset prompt — the artwork only, never UI</span>
+      <textarea name="imagePrompt" rows="5"></textarea></label>
+
+    <label class="field field--block"><span class="field__label">Note — why you saved it</span>
+      <textarea name="note" rows="2"></textarea></label>
+
+    <div class="sheet__actions">
+      <button class="btn btn--solid" type="submit">Save to data.json</button>
+      <button class="btn btn--quiet" type="button" id="editorCancel">Cancel</button>
+      <span class="save-state" id="saveState" role="status"></span>
+    </div>
+  </form>
+</dialog>
+
+<script src="assets/app.js" type="module"></script>
+</body>
+</html>
