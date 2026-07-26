@@ -2,8 +2,153 @@
 
 > Planning document, written 2026-07-26 so a fresh session can pick this up
 > without re-deciding anything. **Phases 1 and 2 are built and verified.**
-> Phase 3 is next. Read "State of play" first, then "Principle 0", then skip to
-> Phases.
+> Phase 3 is eject-to-React.
+>
+> Read in this order: **Direction** (the seam between HTML and React, settled),
+> **Component libraries** (the policy for shadcn, reactbits, magicui, animejs),
+> **Open question** (generation 1 is too finished — blocked on one answer from
+> Alex), then the two states of play, then Principle 0, then Phases.
+
+---
+
+## Direction — settled 2026-07-26
+
+**Explore in HTML. Build in React.** This is the decision that shapes everything
+after Phase 2, agreed with Alex; do not reopen the seam itself.
+
+- **Generations 1 and 2 stay self-contained HTML.** Divergence is the point of
+  exploration. Four concepts that all import the same `<Navbar />` are not four
+  concepts, they are four skins of one site — the same contamination as
+  generation 1 varying world and structure at once. Self-contained files are
+  also what the inspector edits, and they are fast and cheap to produce.
+- **After the final pick, the design is *ejected* into a React project living in
+  this repo.** Not a repo per design — that idea was raised and rejected as
+  pointless ceremony. One project, many pages, sharing components, fonts and
+  hooks. That is where shadcn, reactbits, magicui and animejs live, and where a
+  chosen design grows into home / about / pricing as a coherent site.
+
+```
+website-inspo-library/       the studio, still zero-dependency Node
+  app/                       one Vite + React + Tailwind project
+    src/shared/              primitives, fonts, hooks
+    src/designs/<project>/<variant>/Page.tsx
+```
+
+### What eject costs, and it is not free
+
+1. **The inspector stops working on ejected pages, and fails almost silently.**
+   It saves by re-fetching the file, parsing it inert and patching the element
+   it located. A Vite-served React page is a `<div id="root">` shell, so every
+   patch fails to resolve and the panel reports "N changes could not be located
+   in the file". Honest, but broken. Two candidate fixes, neither free: have the
+   generator stamp stable `data-ins` attributes and let the inspector write a
+   per-design `overrides.css`, or map DOM back to JSX through React's
+   `_debugSource` in dev. Decide before promising editing on the React side.
+2. **`src/shared/` holds behaviour, never looks.** `<Magnetic>`, `<Marquee>`,
+   `<ScrambleText>`, `<Reveal>`. No styled buttons, no card components. The
+   moment a styled shadcn `<Card>` is shared, every site Alex makes has the same
+   card and the whole library has been traded for the 2025 SaaS template it
+   exists to escape. Theming stays per design.
+
+### What eject gets for free
+
+- The workspace's page switcher already reads the design's folder rather than
+  assuming one page. It shows one entry today; after eject it shows the real
+  ones, which is what it was built for.
+- The inspector already assumes the frame is a foreign origin and talks over
+  `postMessage`, so pointing the workspace at a Vite dev server changes nothing
+  architecturally. Injecting the inspector becomes a small Vite plugin instead
+  of a string replace in `serveStatic`.
+
+### Stack
+
+Vite unless these get deployed, in which case Next. shadcn, reactbits and
+magicui are copy-the-source libraries, so they land in `src/shared/` either way;
+animejs is a plain dependency.
+
+### The agreed next step
+
+A spike, not a migration: scaffold `app/`, install shadcn plus one component
+library, and hand-eject the MONOS winner
+(`builds/a-landing-page-for-a-small-batch-coffee-roaster/g2/b/index.html`) into
+it. It touches nothing in the generator and answers the only question that
+matters — whether the behaviour-only shared layer survives contact with a real
+page. If it does, eject becomes a studio phase.
+
+---
+
+## Component libraries — the policy
+
+Alex collects components from kokonutui.pro, reactbits.dev, magicui.design,
+ui.shadcn.com and animejs.com. The rule for all of them:
+
+**Capture-time enrichment, not generation-time lookup.**
+
+The library entry is already the uniform funnel — recipe, copy brief, tags,
+motion character — and Principle 0 already says references contribute character
+and moves, never layout. Component libraries enter the same way. Three tiers:
+
+1. **Taste — works today, no code.** Capture the components Alex actually likes
+   as library entries, same as any site. The generator learns the *move* and
+   writes its own CSS. His picks, not the library's defaults.
+2. **Technique — a small change, not yet built.** A curated set of real snippets
+   for effects painful to re-derive: magnetic buttons, text scramble, gradient
+   border sweep, marquee, spring easing. Handed over as implementations to
+   *adapt*, with a hard cap on how many reach context. Probably a new optional
+   `technique` field on an entry. animejs lives here — inline it, or give the
+   generator only its easing vocabulary.
+3. **Components as code — this is eject.** See the section above.
+
+**Never wire the MCP servers into the fan-out.** Four parallel runs each doing
+MCP handshakes is exactly why `studio.mjs` passes `--strict-mcp-config`. If an
+MCP is worth using, run it *once* at capture time to enrich an entry.
+
+**The risk that makes all of this worth being careful about:** these libraries
+have extremely recognisable defaults — the shadcn look, the magicui
+gradient-beam look. Piping them into the generator is the fastest possible route
+to every output looking like a 2025 AI SaaS landing page. They would be
+competing with Alex's taste instead of serving it, which is the one thing
+Principle 0 exists to prevent.
+
+---
+
+## Open question — generation 1 is too finished
+
+**Raised by Alex, not yet resolved. Blocked on one answer from him.**
+
+Generation 1 currently produces four complete, fully art-directed pages, detail
+in every corner. The recommendation on the table is that this is wrong:
+
+- Generation 1 varies **concept**; generation 2 varies **world only**. Producing
+  four worlds *and* four structures means a strong structure in a world Alex
+  dislikes loses to a weak structure in a world he likes. The selection signal
+  is corrupted at the exact step where structure is meant to be the only
+  variable — then generation 2 spends four more runs restyling the weak one.
+- It pays for work that is thrown away by definition: ~$1.80 and 3.5 minutes a
+  round, and generation 2 discards nearly all the visual effort.
+- "Detail in every corner" is the model hedging. Told to build a complete page
+  it fills every corner, because emptiness reads as unfinished. Filled is not
+  resolved.
+
+**Proposed change — one shared neutral world across all four generation-1
+variants.** Real copy, real hierarchy, real spacing, but one typeface pairing,
+one ground, no texture, no colour beyond ink and paper, motion only where the
+structure needs it. Identical across all four, so the only difference between
+them is the thing being chosen. Roughly a 20-line prompt change in `BUILD_RULES`
+plus a shared-world clause, and fully reversible.
+
+Note this does **not** reopen open question 2: copy stays real. That decision
+was about lorem, and "real copy" was quietly conflated with "realised visual
+world". They are separable.
+
+The risk: four quiet pages are harder to fall for, and judging structure in a
+neutral world takes imagination. The neutral must be genuinely well-set — this
+project's own Pressroom Index is the proof a neutral can be beautiful — not a
+greybox.
+
+**The question that gates it: does Alex ever ship a generation-1 page as-is?**
+If yes, the trade is worse than described and generation 1 should stay as it is.
+Ask before changing the prompt.
 
 ---
 
@@ -180,9 +325,9 @@ started from the CLI or another tab is not invisible.
 
 ### Not done
 
-- `.impeccable/design.json` is stale relative to `DESIGN.md`. Run
+- `.impeccable/design.json` is stale relative to `DESIGN.md`, and got staler
+  when Phase 2 added the Workspace Bar and Inspector Panel components. Run
   `/impeccable document` to resync the design hook.
-- Nothing in the repo is committed.
 
 ## The goal
 
@@ -372,7 +517,17 @@ Editing is available on any variant, not only the final one. It costs nothing
 extra and an edited generation-1 winner is a legitimate thing to want; note that
 generation 2 will restyle whatever the file says at the time it runs.
 
-**Phase 3 — the Builds tab. NEXT.** Browse past projects, reopen, re-edit,
+**Phase 3 — eject to React. NEXT, by the direction agreed above.** Scaffold
+`app/`, define the behaviour-only shared layer, and turn a picked design into a
+real page in it. *Done when the final design is a page in the React project,
+sharing components and fonts with every other page, and a second page can be
+added to the same site.* Start with the hand-eject spike, not the generator.
+
+The order of Phases 3, 4 and 5 is not fixed. Eject is first because it is what
+Alex just endorsed, but the Builds tab is the smaller piece of work and either
+could go first.
+
+**Phase 4 — the Builds tab.** Browse past projects, reopen, re-edit,
 duplicate, delete, export a folder. *Done when a project can be found and
 reopened a week later.*
 
@@ -389,7 +544,7 @@ What Phase 2 leaves in place for it:
 - The workspace is addressable — `view.html?p=<project>&f=<page>` — so Builds
   can link straight into a design rather than re-implementing a preview.
 
-**Phase 4 — assets.** Higgsfield integration. Entries already carry an
+**Phase 5 — assets.** Higgsfield integration. Entries already carry an
 `imagePrompt` written specifically as an *asset* prompt (artwork only, never UI),
 so this slots in: generate the asset, drop it into the design.
 
@@ -463,4 +618,10 @@ Decided while building. Reopen any of them if the output argues otherwise.
   never the screenshot and never the URL. It has no browser and no Read tool in
   generation 1. That is deliberate: handing it the picture is the shortest path
   to the one failure Principle 0 exists to prevent.
-- Nothing in the repo is committed yet.
+- The repo was imported in eight commits on 2026-07-26, grouped by area rather
+  than replaying a history that was never recorded — only `LICENSE` had ever
+  been committed. Intermediate commits are not independently runnable;
+  `assets/styles.css` and `server.mjs` each land whole in the commit for the
+  subsystem that most owns them. Nothing has been pushed, and the remote
+  (`AlexMakesC0de/website-inspo-library`) is public. `.git` is 72MB, almost
+  entirely the 31 reference screenshots — worth a thought before the first push.
