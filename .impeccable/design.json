@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-26T01:37:13.623Z",
+  "title": "Design System: Website Inspo Library",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper Stock",
+        "canonical": "#F2EFE6",
+        "tonalRamp": [
+          "#322C1A",
+          "#594E2E",
+          "#7F7042",
+          "#A59256",
+          "#BAAB7B",
+          "#CEC3A2",
+          "#E2DCC8",
+          "#F6F4EE"
+        ]
+      },
+      "paper-raised": {
+        "role": "neutral",
+        "displayName": "Raised Paper",
+        "canonical": "#FAF8F2",
+        "tonalRamp": [
+          "#372F15",
+          "#615225",
+          "#8B7636",
+          "#B69A46",
+          "#C7B16E",
+          "#D8C898",
+          "#E8DEC2",
+          "#F8F5ED"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Warm Press Black",
+        "canonical": "#17150F",
+        "tonalRamp": [
+          "#2E2A1E",
+          "#524A35",
+          "#756B4C",
+          "#988B63",
+          "#B0A586",
+          "#C7BFA9",
+          "#DEDACC",
+          "#F5F4F0"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Warm Grey",
+        "canonical": "#6B6455",
+        "tonalRamp": [
+          "#2B2822",
+          "#4B463C",
+          "#6C6555",
+          "#8C836F",
+          "#A69F8F",
+          "#C0BBB0",
+          "#DAD7D0",
+          "#F4F3F1"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline Rule",
+        "canonical": "#D8D2C2",
+        "tonalRamp": [
+          "#2F2A1E",
+          "#524A35",
+          "#766A4B",
+          "#998A62",
+          "#B1A585",
+          "#C8BFA8",
+          "#DED9CC",
+          "#F5F4EF"
+        ]
+      },
+      "ink-minium": {
+        "role": "primary",
+        "displayName": "Minium Orange",
+        "canonical": "#B4471C",
+        "tonalRamp": [
+          "#421A0A",
+          "#752E12",
+          "#A7421A",
+          "#DA5622",
+          "#E47B52",
+          "#ECA184",
+          "#F4C8B6",
+          "#FCEEE9"
+        ]
+      },
+      "ink-viridian": {
+        "role": "primary",
+        "displayName": "Viridian",
+        "canonical": "#2C6551",
+        "tonalRamp": [
+          "#17352B",
+          "#295E4B",
+          "#3B866C",
+          "#4CAF8C",
+          "#73C2A7",
+          "#9CD4C0",
+          "#C5E6DA",
+          "#EDF7F4"
+        ]
+      },
+      "ink-ultramarine": {
+        "role": "primary",
+        "displayName": "Ultramarine",
+        "canonical": "#2B4A87",
+        "tonalRamp": [
+          "#12203A",
+          "#213866",
+          "#2F5092",
+          "#3D68BF",
+          "#678ACF",
+          "#93ACDD",
+          "#BFCEEB",
+          "#ECF0F9"
+        ]
+      },
+      "ink-rose-madder": {
+        "role": "primary",
+        "displayName": "Rose Madder",
+        "canonical": "#93325A",
+        "tonalRamp": [
+          "#391323",
+          "#65223E",
+          "#903158",
+          "#BC4073",
+          "#CC6992",
+          "#DB95B2",
+          "#EAC0D1",
+          "#F9ECF1"
+        ]
+      },
+      "ink-violet": {
+        "role": "primary",
+        "displayName": "Violet",
+        "canonical": "#5E4491",
+        "tonalRamp": [
+          "#221834",
+          "#3B2B5C",
+          "#553E83",
+          "#6F50AB",
+          "#8F77BF",
+          "#B09ED2",
+          "#D0C6E4",
+          "#F1EEF7"
+        ]
+      },
+      "ink-ochre": {
+        "role": "primary",
+        "displayName": "Ochre",
+        "canonical": "#7C5A10",
+        "tonalRamp": [
+          "#443109",
+          "#77570F",
+          "#AB7C16",
+          "#DFA21D",
+          "#E8B74E",
+          "#EFCC81",
+          "#F5E1B5",
+          "#FCF6E8"
+        ]
+      },
+      "ink-cerulean": {
+        "role": "primary",
+        "displayName": "Cerulean",
+        "canonical": "#24657F",
+        "tonalRamp": [
+          "#112F3C",
+          "#1E5469",
+          "#2B7896",
+          "#389CC4",
+          "#63B3D3",
+          "#90C9E0",
+          "#BEDFEC",
+          "#EBF5F9"
+        ]
+      },
+      "ink-oxide": {
+        "role": "primary",
+        "displayName": "Oxide Red",
+        "canonical": "#7A3A2A",
+        "tonalRamp": [
+          "#391B14",
+          "#643023",
+          "#904431",
+          "#BB5940",
+          "#CC7E6A",
+          "#DBA395",
+          "#EAC9C1",
+          "#F8EFEC"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Masthead, detail-sheet entry titles, the studio viewer’s variant title, and the final design’s name."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles in the grid, and studio step names at 1.625rem. Names, not headlines."
+      },
+      "title-sm": {
+        "displayName": "Title SM",
+        "purpose": "Variant titles on studio comparison tiles, where 26px crowds a two-line generated title."
+      },
+      "title-xs": {
+        "displayName": "Title XS",
+        "purpose": "Reference-card titles in the studio’s selected-references strip, at 180px card width."
+      },
+      "tab": {
+        "displayName": "Tab",
+        "purpose": "Library / Studio navigation. Names a surface without outweighing the masthead above it."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Recipe, copy brief and prompt text. Capped at 68ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Chips, field names, buttons, section marks. Uppercase, tracked."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Tags, descriptors, counts, NN/TT indices."
+      }
+    },
+    "shadows": [
+      {
+        "name": "overlay",
+        "value": "0 24px 80px rgba(23, 21, 15, 0.28)",
+        "purpose": "The two modal surfaces only — the detail sheet and the studio viewer. Never used on anything that is not modal."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.2, 0, 0, 1)",
+        "purpose": "All state transitions."
+      },
+      {
+        "name": "duration-state",
+        "value": "140ms",
+        "purpose": "Hover and active transitions on chips, cards, tabs, buttons."
+      },
+      {
+        "name": "duration-copy-hold",
+        "value": "1400ms",
+        "purpose": "How long a copy button holds its COPIED state before reverting."
+      },
+      {
+        "name": "duration-card-arrive",
+        "value": "2000ms",
+        "purpose": "One quiet border pass in the group ink when an entry lands while you are looking elsewhere."
+      },
+      {
+        "name": "duration-plate-scan",
+        "value": "2600ms",
+        "purpose": "A hairline crossing an empty variant plate while its page is being generated. The system’s substitute for a spinner."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "700px"
+      },
+      {
+        "name": "md",
+        "value": "760px"
+      },
+      {
+        "name": "board",
+        "value": "900px"
+      },
+      {
+        "name": "sheet-split",
+        "value": "1000px"
+      },
+      {
+        "name": "lg",
+        "value": "1200px"
+      },
+      {
+        "name": "max",
+        "value": "1600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Tabs",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "Names the two surfaces. Set in the serif because tabs name and chips measure — that is what keeps them from reading as the same control.",
+      "html": "<nav class=\"ds-tabs\"><button class=\"ds-tab\" aria-selected=\"true\">Library</button><button class=\"ds-tab\" aria-selected=\"false\">Studio</button></nav><hr class=\"ds-tabs-rule\">",
+      "css": ".ds-tabs{display:flex;gap:24px;padding:0 0 12px}.ds-tab{font:400 20px/1 \"Libre Caslon Display\",Georgia,serif;color:#6B6455;background:none;border:0;border-bottom:1px solid transparent;border-radius:0;padding:18px 0 8px;cursor:pointer;transition:color 140ms cubic-bezier(.2,0,0,1),border-color 140ms cubic-bezier(.2,0,0,1)}.ds-tab:hover{color:#17150F}.ds-tab:focus-visible{outline:2px solid #17150F;outline-offset:2px}.ds-tab[aria-selected=\"true\"]{color:#17150F;border-bottom-color:#17150F}.ds-tabs-rule{border:0;border-top:1px solid #17150F;margin:0}"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Group filter carrying a live count. Fills with the group ink when active.",
+      "html": "<button class=\"ds-chip\" aria-pressed=\"false\"><span class=\"ds-chip-diamond\"></span>DITHER MONO<span class=\"ds-chip-count\">5</span></button>",
+      "css": ".ds-chip{--chip-ink:#2C6551;display:inline-flex;align-items:center;gap:10px;font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#17150F;background:#F2EFE6;border:1px solid #17150F;border-radius:0;padding:11px 14px;cursor:pointer;font-variant-numeric:tabular-nums;transition:background 140ms cubic-bezier(.2,0,0,1)}.ds-chip:hover{background:#FAF8F2}.ds-chip:focus-visible{outline:2px solid #17150F;outline-offset:2px}.ds-chip-diamond{width:6px;height:6px;background:var(--chip-ink);transform:rotate(45deg);flex:none}.ds-chip-count{color:#6B6455;font-weight:400}.ds-chip[aria-pressed=\"true\"]{background:var(--chip-ink);border-color:var(--chip-ink);color:#F2EFE6}.ds-chip[aria-pressed=\"true\"] .ds-chip-diamond{background:#F2EFE6}.ds-chip[aria-pressed=\"true\"] .ds-chip-count{color:#F2EFE6;opacity:.62}"
+    },
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "One concrete visual move. Clicking filters the library by it.",
+      "html": "<button class=\"ds-tag\">halftone CMYK dot texture</button>",
+      "css": ".ds-tag{font:400 12px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.02em;color:#17150F;background:#F2EFE6;border:1px solid #D8D2C2;border-radius:0;padding:7px 10px;cursor:pointer;transition:border-color 140ms cubic-bezier(.2,0,0,1)}.ds-tag:hover{border-color:#17150F}.ds-tag:focus-visible{outline:2px solid #17150F;outline-offset:2px}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "A plate bleeding to the card edge over a mono caption block. Flat at every state.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-plate\"></div><div class=\"ds-card-cap\"><div class=\"ds-card-line\"><h2 class=\"ds-card-title\">Stillpage</h2><p class=\"ds-card-desc\">warm editorial x print DNA</p></div><div class=\"ds-card-foot\"><span class=\"ds-group-mark\">PRINT-TECH PAPER</span><span class=\"ds-card-index\">01 / 28</span></div></div></article>",
+      "css": ".ds-card{--group-ink:#B4471C;display:flex;flex-direction:column;background:#FAF8F2;border:1px solid #D8D2C2;border-radius:0;transition:border-color 140ms cubic-bezier(.2,0,0,1);max-width:420px}.ds-card:hover{border-color:#17150F}.ds-card-plate{aspect-ratio:4/3;background:#F2EFE6;border-bottom:1px solid #D8D2C2}.ds-card-cap{padding:16px;display:flex;flex-direction:column;gap:12px}.ds-card-line{display:flex;align-items:baseline;justify-content:space-between;gap:16px}.ds-card-title{font:400 26px/1.05 \"Libre Caslon Display\",Georgia,serif;margin:0;color:#17150F}.ds-card-desc{font:400 12px/1.35 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#6B6455;text-align:right;margin:0;max-width:52%;text-wrap:balance}.ds-card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid #D8D2C2}.ds-group-mark{display:inline-flex;align-items:center;gap:8px;font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--group-ink)}.ds-group-mark::before{content:\"\";width:6px;height:6px;background:var(--group-ink);transform:rotate(45deg)}.ds-card-index{font:400 12px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#6B6455;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Variant Tile",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "A generated landing page judged at a glance. The preview is an iframe rendered at 1440px and scaled down, never reflowed — a squeezed preview lies about the design being picked.",
+      "html": "<article class=\"ds-tile\" data-winner=\"true\"><header class=\"ds-tile-head\"><span class=\"ds-tile-key\">A</span><span class=\"ds-tile-state\">Picked</span></header><div class=\"ds-tile-plate\"></div><div class=\"ds-tile-cap\"><h3 class=\"ds-tile-title\">MONOS — The Single-Origin Register</h3><p class=\"ds-tile-world\">bone-paper ground with a red ledger margin rule; ink-black serif carries entry values, red monospace carries field labels</p><div class=\"ds-tile-foot\"><button class=\"ds-btn-solid\">PICK</button><button class=\"ds-btn-quiet\">OPEN</button><button class=\"ds-tile-why\">Sources</button></div></div></article>",
+      "css": ".ds-tile{display:flex;flex-direction:column;background:#FAF8F2;border:1px solid #D8D2C2;border-radius:0;transition:border-color 140ms cubic-bezier(.2,0,0,1);max-width:520px}.ds-tile:hover,.ds-tile[data-winner=\"true\"]{border-color:#17150F}.ds-tile-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 16px;border-bottom:1px solid #D8D2C2}.ds-tile-key{font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;color:#17150F}.ds-tile-state{font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#17150F;font-variant-numeric:tabular-nums}.ds-tile-plate{aspect-ratio:16/10;background:#F2EFE6;border-bottom:1px solid #D8D2C2}.ds-tile-cap{padding:16px;display:flex;flex-direction:column;gap:10px}.ds-tile-title{margin:0;font:400 22px/1.05 \"Libre Caslon Display\",Georgia,serif;color:#17150F}.ds-tile-world{margin:0;font:400 12px/1.45 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#6B6455;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.ds-tile-foot{display:flex;align-items:center;gap:8px;padding-top:12px;border-top:1px solid #D8D2C2}.ds-btn-solid,.ds-btn-quiet{font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;border-radius:0;padding:11px 14px;cursor:pointer;transition:background 140ms cubic-bezier(.2,0,0,1),color 140ms cubic-bezier(.2,0,0,1)}.ds-btn-solid{color:#F2EFE6;background:#17150F;border:1px solid #17150F}.ds-btn-solid:hover{background:#6B6455}.ds-btn-quiet{color:#6B6455;background:#F2EFE6;border:1px solid #D8D2C2}.ds-btn-quiet:hover{border-color:#17150F;color:#17150F}.ds-tile-why{margin-left:auto;font:400 12px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#6B6455;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}.ds-tile-why:hover{color:#17150F}"
+    },
+    {
+      "name": "Variant Tile (generating)",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The waiting state. No spinner: a 1px hairline crosses the empty plate over 2600ms while the angle this variant is committing to sits underneath it.",
+      "html": "<article class=\"ds-tile-wait\"><header class=\"ds-tile-head\"><span class=\"ds-tile-key\">C</span><span class=\"ds-tile-state\">thinking · 02:14</span></header><div class=\"ds-tile-scan\"><p class=\"ds-tile-angle\">THE MANIFESTO — no cards, no grids, no boxes. The page is one continuous argument set as running text, and the sections are its paragraphs.</p></div></article>",
+      "css": ".ds-tile-wait{display:flex;flex-direction:column;background:#FAF8F2;border:1px solid #D8D2C2;border-radius:0;max-width:520px}.ds-tile-scan{position:relative;aspect-ratio:16/10;background:#F2EFE6;display:grid;place-items:center;padding:24px;overflow:hidden}.ds-tile-scan::after{content:\"\";position:absolute;left:0;right:0;top:0;height:1px;background:#6B6455;animation:ds-plate-scan 2600ms cubic-bezier(.2,0,0,1) infinite}@keyframes ds-plate-scan{0%{transform:translateY(0);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translateY(100%);opacity:0}}.ds-tile-angle{margin:0;max-width:48ch;font:400 12px/1.55 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#6B6455;text-align:center}@media (prefers-reduced-motion:reduce){.ds-tile-scan::after{animation-duration:.01ms}}"
+    },
+    {
+      "name": "Reference Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "A miniature of the grid card, used in the studio’s selected-references strip. Its remove control mirrors the detail sheet’s close: a square cut into the top-right corner at -1px.",
+      "html": "<article class=\"ds-ref\"><div class=\"ds-ref-plate\"></div><div class=\"ds-ref-cap\"><p class=\"ds-ref-title\">Vaulk</p><p class=\"ds-ref-desc\">cinematic architecture photography x tactical viewfinder chrome</p></div><button class=\"ds-ref-drop\" aria-label=\"Remove Vaulk\">×</button></article>",
+      "css": ".ds-ref{position:relative;display:flex;flex-direction:column;background:#FAF8F2;border:1px solid #D8D2C2;border-radius:0;transition:border-color 140ms cubic-bezier(.2,0,0,1);width:180px}.ds-ref:hover{border-color:#17150F}.ds-ref-plate{aspect-ratio:4/3;background:#F2EFE6;border-bottom:1px solid #D8D2C2}.ds-ref-cap{padding:10px 12px;display:flex;flex-direction:column;gap:3px}.ds-ref-title{margin:0;font:400 15px/1.15 \"Libre Caslon Display\",Georgia,serif;color:#17150F}.ds-ref-desc{margin:0;font:400 11px/1.35 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#6B6455;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.ds-ref-drop{position:absolute;top:-1px;right:-1px;width:26px;height:26px;display:grid;place-items:center;font:400 15px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#17150F;background:#FAF8F2;border:1px solid #D8D2C2;border-radius:0;cursor:pointer;opacity:0;transition:opacity 140ms cubic-bezier(.2,0,0,1),background 140ms cubic-bezier(.2,0,0,1)}.ds-ref:hover .ds-ref-drop,.ds-ref-drop:focus-visible{opacity:1}.ds-ref-drop:hover{background:#17150F;color:#F2EFE6;border-color:#17150F}"
+    },
+    {
+      "name": "Copy Button",
+      "kind": "button",
+      "refersTo": "button-copy",
+      "description": "The signature interaction. Inverts to ink and reads COPIED for 1.4s. Never a toast.",
+      "html": "<button class=\"ds-copy\">COPY</button> <button class=\"ds-copy\" data-done=\"true\">COPIED</button>",
+      "css": ".ds-copy{font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#17150F;background:#FAF8F2;border:1px solid #17150F;border-radius:0;padding:8px 12px;cursor:pointer;min-width:88px;transition:background 140ms cubic-bezier(.2,0,0,1),color 140ms cubic-bezier(.2,0,0,1)}.ds-copy:hover{background:#F2EFE6}.ds-copy:focus-visible{outline:2px solid #17150F;outline-offset:2px}.ds-copy[data-done=\"true\"]{background:#17150F;color:#F2EFE6}"
+    },
+    {
+      "name": "Artifact Block",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Holds one of the three artifacts (recipe, copy brief, image prompt) with its own copy action, so a block can be copied without being read.",
+      "html": "<section class=\"ds-artifact\"><div class=\"ds-artifact-head\"><span class=\"ds-artifact-label\">Image recipe</span><button class=\"ds-copy\">COPY</button></div><p class=\"ds-artifact-text\">Warm paper ground with a halftone CMYK dot field anchoring the right third.</p></section>",
+      "css": ".ds-artifact{border:1px solid #D8D2C2;background:#F2EFE6;max-width:560px}.ds-artifact-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 16px;border-bottom:1px solid #D8D2C2}.ds-artifact-label{font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#6B6455}.ds-artifact-text{margin:0;padding:16px;font:400 13px/1.6 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;max-width:68ch;color:#17150F}"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "chip",
+      "description": "Underline-only input. Focus thickens the rule to ink; no ring, no glow. The studio brief is the one field set in the serif — see The Brief Is Prose Rule.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Filter</span><input placeholder=\"name, tag, recipe…  ( / )\"></label><label class=\"ds-field ds-field-brief\"><span class=\"ds-field-label\">One sentence is enough</span><input placeholder=\"a landing page for a small-batch coffee roaster\"></label>",
+      "css": ".ds-field{display:block;margin-bottom:24px}.ds-field-label{display:block;font:500 11px/1 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#6B6455;margin-bottom:4px}.ds-field input{font:400 13px/1.6 \"Sometype Mono\",ui-monospace,SFMono-Regular,Menlo,monospace;color:#17150F;background:transparent;border:0;border-bottom:1px solid #D8D2C2;border-radius:0;padding:6px 0;width:100%;min-width:240px}.ds-field input::placeholder{color:#6B6455;opacity:.7}.ds-field input:focus{outline:none;border-bottom-color:#17150F;border-bottom-width:2px;padding-bottom:5px}.ds-field-brief input{font:400 20px/1.35 \"Libre Caslon Display\",Georgia,serif;padding-bottom:10px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Pressroom Index",
+    "overview": "This is printed matter that happens to be running in a browser. Warm off-white stock, ink that was never quite black, hairline rules that look ruled rather than drawn, and a monospaced apparatus doing all the labelling — counts, tags, indices, field names. Against that apparatus, one high-contrast serif carries the entry titles, and the difference between the two voices is the whole typographic idea: the serif names things, the mono measures them.\n\nThe density is deliberate and slightly higher than comfortable. This is an index, not a moodboard — it should feel like a working document that has been set properly, not a gallery that has been art-directed. Every number on the page is real and recomputes: the chip counts, the NN / TT index, the tag overflow. Nothing is decorative typography pretending to be data.\n\nColor is almost entirely absent from the chrome, because the chrome is competing with screenshots that each arrive with their own palette and will always win. The single exception is the group ink system: each design group owns one saturated printing ink, and that ink is the only chroma the interface itself is permitted. It does structural work — identifying a group at a glance across the whole grid — and it never decorates.",
+    "keyCharacteristics": [
+      "Warm paper ground, never white, never cream-sweet",
+      "Zero border radius anywhere; printed matter has cut edges",
+      "Monospace for all apparatus, high-contrast serif for all names",
+      "Flat by default: depth comes from border weight and tonal layering, not shadow",
+      "One saturated ink per group, used structurally and sparingly"
+    ],
+    "rules": [
+      {
+        "name": "The Screenshot Owns The Color Rule",
+        "body": "Saturated color in the chrome is reserved for group inks. Everything else is paper, ink, soft ink, and rule. If a new UI element needs a color to be understood, it needs better typography instead.",
+        "section": "colors"
+      },
+      {
+        "name": "The Warm Neutral Rule",
+        "body": "No neutral in this system is chromatically neutral. Every grey and every black carries a yellow-red cast. A cool grey anywhere on the page is a bug.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "The serif names, the mono measures. A title is never mono; a count, tag, label, or index is never serif. There is no third typeface.",
+        "section": "typography"
+      },
+      {
+        "name": "The Brief Is Prose Rule",
+        "body": "Every input in the library is a field and is set in mono. The studio’s brief is the one exception: it is a sentence a person writes, not a value they enter, so it is set in the serif. Nothing else that accepts typing may be.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Figure Rule",
+        "body": "Every number in the interface uses font-variant-numeric: tabular-nums. Counts and indices change constantly as filters apply, and columns must not jitter.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Page Rule",
+        "body": "If an element needs a shadow to be legible, its border weight is wrong. Hover states change border color and tonal value, never elevation.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep border radius at 0 on every element, without exception.",
+      "Do give every group exactly one ink and reuse it in all three sanctioned places.",
+      "Do use tabular-nums on every number that can change.",
+      "Do express hover as a border-color and tonal change only.",
+      "Do let the screenshot bleed to the card’s edge; the image is the content, the caption is the apparatus.",
+      "Do keep the chip bar fully visible and wrapping, never horizontally scrolling."
+    ],
+    "donts": [
+      "Don’t introduce a sans-serif. The system has exactly two faces.",
+      "Don’t add a shadow to any element except the detail overlay.",
+      "Don’t use pure white (#FFF) or pure black (#000) anywhere.",
+      "Don’t use a chromatically neutral grey; every neutral carries a warm cast.",
+      "Don’t let group ink touch body text, borders, or backgrounds outside the three sanctioned uses.",
+      "Don’t replace the grid with masonry; equal-height rows exist so treatments can be compared across a row.",
+      "Don’t show copy confirmation as a toast or floating notification."
+    ]
+  }
+}
