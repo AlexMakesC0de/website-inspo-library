@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!--
+  The workspace — one generated page, full width, with just enough chrome to
+  navigate it, zoom it, comment on it, present it and edit it. Opened in its own
+  tab from the studio; the modal viewer is for comparing, this is for working.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workspace — Website Inspo Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Sometype+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body class="ws">
+
+<header class="ws__bar" id="wsBar">
+  <div class="ws__side">
+    <button class="ws__btn ws__btn--icon" id="wsReload" type="button" title="Reload the design" aria-label="Reload the design">
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M13.5 8a5.5 5.5 0 1 1-1.9-4.16"/>
+        <path d="M13.5 1.5V4.5H10.5"/>
+      </svg>
+    </button>
+
+    <div class="ws__menu" id="wsPagesMenu">
+      <button class="ws__btn" id="wsPages" type="button" aria-expanded="false" aria-haspopup="true">
+        <span id="wsPageName">Home</span>
+        <span class="ws__caret" aria-hidden="true">▾</span>
+      </button>
+      <div class="ws__pop" id="wsPagesPop" hidden></div>
+    </div>
+
+    <p class="ws__id" id="wsId"></p>
+  </div>
+
+  <div class="ws__side ws__side--end">
+    <div class="ws__menu" id="wsZoomMenu">
+      <button class="ws__btn" id="wsZoom" type="button" aria-expanded="false" aria-haspopup="true" title="Zoom (⌘− / ⌘+)">
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <circle cx="7" cy="7" r="4.5"/>
+          <path d="M10.4 10.4L14 14"/>
+        </svg>
+        <span id="wsZoomLabel">100%</span>
+      </button>
+      <div class="ws__pop" id="wsZoomPop" hidden></div>
+    </div>
+
+    <button class="ws__btn" id="wsComment" type="button" aria-pressed="false">
+      Comment <span class="ws__count" id="wsCommentCount"></span>
+    </button>
+
+    <div class="ws__menu" id="wsPresentMenu">
+      <button class="ws__btn" id="wsPresent" type="button" aria-expanded="false" aria-haspopup="true">
+        Present <span class="ws__caret" aria-hidden="true">▾</span>
+      </button>
+      <div class="ws__pop" id="wsPresentPop" hidden></div>
+    </div>
+
+    <button class="ws__btn ws__btn--solid" id="wsEdit" type="button" aria-pressed="false">Edit</button>
+  </div>
+</header>
+
+<main class="ws__body">
+  <div class="ws__stage" id="wsStage">
+    <iframe class="ws__frame" id="wsFrame" title="Generated page" sandbox="allow-scripts"></iframe>
+
+    <!-- The comment composer, anchored over the stage rather than in the page:
+         the page is a design, not a document that knows about comments. -->
+    <div class="ws__composer" id="wsComposer" hidden>
+      <p class="ws__composerHead">
+        <span class="ws__composerMark" id="wsComposerMark"></span>
+        <button class="ws__composerClose" id="wsComposerClose" type="button" aria-label="Close">×</button>
+      </p>
+      <div class="ws__thread" id="wsThread"></div>
+      <form id="wsCommentForm">
+        <textarea id="wsCommentText" rows="3" spellcheck="false" placeholder="What should change here?"></textarea>
+        <div class="ws__composerFoot">
+          <button class="btn btn--solid" type="submit">Leave comment</button>
+          <span class="ws__hint">⌘⏎</span>
+        </div>
+      </form>
+    </div>
+
+    <p class="ws__presenting" id="wsPresenting" hidden>Presenting — press Esc for the chrome</p>
+  </div>
+
+  <!-- ─── INSPECTOR ──────────────────────────────────────────────────────── -->
+  <aside class="insp" id="inspector" data-min="false" aria-label="Inspector" hidden>
+    <header class="insp__head">
+      <span class="insp__mark">Inspector</span>
+      <button class="insp__min" id="inspMin" type="button" aria-label="Minimise the inspector">–</button>
+    </header>
+
+    <nav class="insp__crumbs" id="inspCrumbs" aria-label="Selected element"></nav>
+
+    <div class="insp__body">
+      <p class="insp__empty" id="inspEmpty">
+        Click anything on the page to select it. Double-click to edit its words.
+      </p>
+
+      <div class="insp__fields" id="inspFields" hidden>
+
+        <section class="insp__group">
+          <h3 class="insp__groupName">Type</h3>
+          <label class="insp__f"><span class="insp__label">Family</span>
+            <input data-prop="font-family" list="inspFonts" spellcheck="false" autocomplete="off"></label>
+          <div class="insp__pair">
+            <label class="insp__f"><span class="insp__label">Size</span>
+              <input data-prop="font-size" spellcheck="false" autocomplete="off"></label>
+            <label class="insp__f"><span class="insp__label">Weight</span>
+              <input data-prop="font-weight" spellcheck="false" autocomplete="off"></label>
+            <label class="insp__f"><span class="insp__label">Tracking</span>
+              <input data-prop="letter-spacing" spellcheck="false" autocomplete="off"></label>
+            <label class="insp__f"><span class="insp__label">Leading</span>
+              <input data-prop="line-height" spellcheck="false" autocomplete="off"></label>
+          </div>
+        </section>
+
+        <section class="insp__group">
+          <h3 class="insp__groupName">Colour</h3>
+          <label class="insp__f"><span class="insp__label">Ink</span>
+            <span class="insp__colour">
+              <input class="insp__swatch" type="color" data-swatch="color" aria-label="Ink">
+              <input data-prop="color" spellcheck="false" autocomplete="off">
+            </span></label>
+          <label class="insp__f"><span class="insp__label">Ground</span>
+            <span class="insp__colour">
+              <input class="insp__swatch" type="color" data-swatch="background-color" aria-label="Ground">
+              <input data-prop="background-color" spellcheck="false" autocomplete="off">
+            </span></label>
+        </section>
+
+        <section class="insp__group">
+          <h3 class="insp__groupName">Space</h3>
+          <p class="insp__sub">Padding</p>
+          <div class="insp__quad">
+            <label class="insp__f"><span class="insp__label">T</span><input data-prop="padding-top" spellcheck="false"></label>
+            <label class="insp__f"><span class="insp__label">R</span><input data-prop="padding-right" spellcheck="false"></label>
+            <label class="insp__f"><span class="insp__label">B</span><input data-prop="padding-bottom" spellcheck="false"></label>
+            <label class="insp__f"><span class="insp__label">L</span><input data-prop="padding-left" spellcheck="false"></label>
+          </div>
+          <p class="insp__sub">Margin</p>
+          <div class="insp__quad">
+            <label class="insp__f"><span class="insp__label">T</span><input data-prop="margin-top" spellcheck="false"></label>
+            <label class="insp__f"><span class="insp__label">R</span><input data-prop="margin-right" spellcheck="false"></label>
+            <label class="insp__f"><span class="insp__label">B</span><input data-prop="margin-bottom" spellcheck="false"></label>
+            <label class="insp__f"><span class="insp__label">L</span><input data-prop="margin-left" spellcheck="false"></label>
+          </div>
+          <label class="insp__f"><span class="insp__label">Radius</span>
+            <input data-prop="border-radius" spellcheck="false" autocomplete="off"></label>
+        </section>
+
+        <section class="insp__group">
+          <h3 class="insp__groupName">Motion</h3>
+          <div class="insp__pair">
+            <label class="insp__f"><span class="insp__label">Duration</span>
+              <input data-prop="transition-duration" spellcheck="false" autocomplete="off"></label>
+            <label class="insp__f"><span class="insp__label">Property</span>
+              <input data-prop="transition-property" spellcheck="false" autocomplete="off"></label>
+          </div>
+          <label class="insp__f"><span class="insp__label">Easing</span>
+            <input data-prop="transition-timing-function" list="inspEases" spellcheck="false" autocomplete="off"></label>
+        </section>
+
+        <section class="insp__group">
+          <h3 class="insp__groupName">Words</h3>
+          <button class="btn btn--quiet" id="inspText" type="button">Edit this text</button>
+          <p class="insp__note" id="inspTextNote"></p>
+        </section>
+
+      </div>
+    </div>
+
+    <footer class="insp__foot">
+      <div class="insp__row">
+        <button class="btn btn--quiet" id="inspUndo" type="button">Undo</button>
+        <button class="btn btn--quiet" id="inspResetEl" type="button">Reset element</button>
+        <button class="btn btn--quiet" id="inspRevert" type="button" hidden>Revert</button>
+      </div>
+      <p class="insp__state" id="inspState" role="status"></p>
+    </footer>
+
+    <datalist id="inspFonts"></datalist>
+    <datalist id="inspEases"></datalist>
+  </aside>
+</main>
+
+<script src="assets/workspace.js" type="module"></script>
+</body>
+</html>
