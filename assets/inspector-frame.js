@@ -181,6 +181,10 @@
       crumbs: crumbs(el),
       label: name(el),
       tag: el.tagName.toLowerCase(),
+      // Tweak sends this to a model that has to find the element in the page
+      // source. A path of nth-child steps is precise but close to unreadable;
+      // the markup itself is what actually locates it.
+      html: el.outerHTML.slice(0, 400),
       textOnly: editable(el),
       text: editable(el) ? el.textContent : null,
       asset: el.hasAttribute('data-asset-prompt') || !!el.closest('[data-asset-prompt]'),
@@ -373,6 +377,23 @@
     if (msg.t === 'text') {
       const el = find(msg.sel);
       if (el) el.textContent = msg.value;
+      repaint();
+      return;
+    }
+
+    /* A tweak arrives as a stylesheet, because the things it can say — a hover
+       state, a breakpoint, a keyframe — have no inline form. One tag, replaced
+       wholesale: the panel always sends the complete patch, so there is nothing
+       to merge here and no way for the two sides to drift. The same id is used
+       in the saved file, so a reload finds this element already in place. */
+    if (msg.t === 'css') {
+      let tag = document.getElementById('inspo-tweak');
+      if (!tag) {
+        tag = document.createElement('style');
+        tag.id = 'inspo-tweak';
+        document.head.append(tag);
+      }
+      tag.textContent = msg.css || '';
       repaint();
       return;
     }

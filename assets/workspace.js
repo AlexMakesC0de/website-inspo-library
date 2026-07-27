@@ -11,6 +11,7 @@
    URL: view.html?p=<project id>&f=g2/b/index.html                            */
 
 import { mountInspector } from './inspector.js';
+import { mountTweak } from './tweak.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -29,6 +30,7 @@ const st = {
   pending: null,      // the element a comment is being written about
   open: null,         // the comment whose thread is showing
   inspector: null,
+  tweak: null,
 };
 
 const api = async (path, options) => {
@@ -309,7 +311,9 @@ async function setEdit(on) {
   if (on) {
     closeComposer();
     await st.inspector.attach({ projectId: st.projectId, path: st.path });
+    await st.tweak.attach({ projectId: st.projectId, path: st.path });
   } else {
+    st.tweak.detach();
     await st.inspector.detach();
     // detach disarms the frame; commenting may still want it armed.
     if (st.commenting) post({ t: 'arm', on: true, mode: 'comment' });
@@ -326,6 +330,10 @@ st.inspector = mountInspector({
   frame: frame(),
   onSaved: () => { /* the file is the record; nothing else to keep in step */ },
 });
+
+// Tweak shares the dock, the patch, the undo stack and the save. It is a second
+// way to say what should change, not a second thing that changes it.
+st.tweak = mountTweak({ inspector: st.inspector, frame: frame() });
 
 addEventListener('message', (ev) => {
   if (ev.source !== frame().contentWindow || ev.data?.from !== 'inspo') return;

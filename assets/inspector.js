@@ -34,6 +34,7 @@ export function mountInspector({ frame, onSaved }) {
     sel: null,          // the selected element's path
     snap: new Map(),    // sel → { inline, text } as first seen this session
     edits: new Map(),   // sel → { style: {prop: value}, text?: string }
+    css: '',            // the tweak patch — one stylesheet, always complete
     undo: [],           // { sel, kind, prop, from }
     baseline: false,    // is a copy of the generated original kept on disk
     timer: null,
@@ -55,7 +56,8 @@ export function mountInspector({ frame, onSaved }) {
   }
 
   const changeCount = () => [...st.edits.values()]
-    .reduce((n, e) => n + Object.keys(e.style).length + (e.text != null ? 1 : 0), 0);
+    .reduce((n, e) => n + Object.keys(e.style).length + (e.text != null ? 1 : 0), 0)
+    + (st.css.trim() ? 1 : 0);
 
   function refreshFoot() {
     $('inspUndo').disabled = !st.undo.length;
@@ -91,17 +93,34 @@ export function mountInspector({ frame, onSaved }) {
     queueSave();
   }
 
+  /* A tweak's patch rides the same undo stack as a hand-made change, so one
+     Undo walks back through both kinds in the order they happened. The panel
+     holds the whole patch rather than a delta, which is what makes undoing it
+     a single assignment. */
+  function setCss(text, { record = true } = {}) {
+    const next = String(text || '');
+    if (next === st.css) return;
+    if (record) st.undo.push({ kind: 'css', from: st.css });
+    st.css = next;
+    post({ t: 'css', css: st.css });
+    queueSave();
+  }
+
   function undo() {
     const last = st.undo.pop();
     if (!last) return;
-    if (last.kind === 'style') {
+    if (last.kind === 'css') {
+      st.css = last.from;
+      post({ t: 'css', css: st.css });
+    } else if (last.kind === 'style') {
       entry(last.sel).style[last.prop] = last.from;
       post({ t: 'style', sel: last.sel, prop: last.prop, value: last.from, echo: true });
     } else {
       entry(last.sel).text = last.from;
       post({ t: 'text', sel: last.sel, value: last.from });
     }
-    if (last.sel !== st.sel) post({ t: 'select', sel: last.sel, reveal: true });
+    // A patch undo belongs to no single element, so there is nothing to reveal.
+    if (last.sel && last.sel !== st.sel) post({ t: 'select', sel: last.sel, reveal: true });
     queueSave();
     refreshFoot();
   }
@@ -162,7 +181,12 @@ export function mountInspector({ frame, onSaved }) {
   }
 
   async function save() {
-    if (!st.ctx || !st.edits.size || !st.pending) return;
+    /* Only st.pending decides. It is set by the one function every change goes
+       through, so it already means "there is something to write" — where a
+       count of edits does not: undoing a tweak back to nothing leaves zero of
+       both and still has to reach the file, or the patch stays on disk after
+       being taken off the page. */
+    if (!st.ctx || !st.pending) return;
     if (st.saving) { await st.saving.catch(() => {}); }
     st.pending = false;
     st.saving = (async () => {
@@ -183,6 +207,21 @@ export function mountInspector({ frame, onSaved }) {
         }
         if (!el.getAttribute('style')) el.removeAttribute('style');
         if (e.text != null) el.textContent = e.text;
+      }
+
+      /* The patch is one stylesheet at the end of the head, rewritten in place
+         and carrying the same id the frame uses. st.css is always the whole
+         patch, so writing it twice is writing it once — and a page whose patch
+         has been undone back to nothing loses the tag rather than keeping an
+         empty one. */
+      const patch = doc.getElementById('inspo-tweak');
+      if (st.css.trim()) {
+        const tag = patch || doc.createElement('style');
+        tag.id = 'inspo-tweak';
+        tag.textContent = `\n${st.css.trim()}\n`;
+        if (!patch) doc.head.append(tag);
+      } else if (patch) {
+        patch.remove();
       }
 
       const res = await fetch(`/api/studio/projects/${encodeURIComponent(projectId)}/edit`, {
@@ -232,6 +271,8 @@ export function mountInspector({ frame, onSaved }) {
     }
     st.edits.clear();
     st.snap.clear();
+    // The generator's page has no patch on it, so neither does this session.
+    st.css = '';
     st.undo.length = 0;
     st.baseline = false;
     st.sel = null;
@@ -412,12 +453,21 @@ export function mountInspector({ frame, onSaved }) {
       st.sel = null;
       st.edits.clear();
       st.snap.clear();
+      st.css = '';
       st.undo.length = 0;
       st.pending = false;
       panel.hidden = false;
       panel.dataset.min = 'false';
       showFields(null);
       state('Click anything on the page.');
+
+      // The page may already carry a patch from an earlier session. Read it
+      // back, or this session's first save would erase every tweak on it.
+      st.css = await fetch(`builds/${ctx.projectId}/${ctx.path}`, { cache: 'no-store' })
+        .then((r) => (r.ok ? r.text() : ''))
+        .then((src) => new DOMParser().parseFromString(src, 'text/html')
+          .getElementById('inspo-tweak')?.textContent.trim() || '')
+        .catch(() => '');
 
       // A kept original means this page has been edited before, which is the
       // only thing that makes Revert meaningful.
@@ -440,9 +490,24 @@ export function mountInspector({ frame, onSaved }) {
       st.sel = null;
       st.edits.clear();
       st.snap.clear();
+      st.css = '';
       st.undo.length = 0;
     },
 
+    /* What the Tweak tab needs from here. It owns the conversation; the patch
+       and the saving stay the inspector's, so one Undo and one save serve both
+       halves of the panel. */
+    get patch() { return st.css; },
+
+    applyTweak({ css, text = [] }) {
+      if (typeof css === 'string') setCss(css);
+      for (const change of text) {
+        if (change?.sel && typeof change.value === 'string') setText(change.sel, change.value);
+      }
+      refreshFoot();
+    },
+
+    get selection() { return st.sel; },
     get active() { return !!st.ctx; },
   };
 }

@@ -90,13 +90,16 @@
   <!-- ─── INSPECTOR ──────────────────────────────────────────────────────── -->
   <aside class="insp" id="inspector" data-min="false" aria-label="Inspector" hidden>
     <header class="insp__head">
-      <span class="insp__mark">Inspector</span>
+      <div class="insp__tabs" role="tablist" aria-label="Inspector mode">
+        <button class="insp__tab" id="inspTabFields" type="button" role="tab" aria-selected="true" aria-controls="inspPaneFields">Inspect</button>
+        <button class="insp__tab" id="inspTabTweak" type="button" role="tab" aria-selected="false" aria-controls="inspPaneTweak">Tweak</button>
+      </div>
       <button class="insp__min" id="inspMin" type="button" aria-label="Minimise the inspector">–</button>
     </header>
 
     <nav class="insp__crumbs" id="inspCrumbs" aria-label="Selected element"></nav>
 
-    <div class="insp__body">
+    <div class="insp__body" id="inspPaneFields" role="tabpanel" aria-labelledby="inspTabFields">
       <p class="insp__empty" id="inspEmpty">
         Click anything on the page to select it. Double-click to edit its words.
       </p>
@@ -172,6 +175,28 @@
         </section>
 
       </div>
+    </div>
+
+    <!-- The Tweak tab. Same dock, same undo, same save — the difference is that
+         you describe the change instead of typing the value. -->
+    <div class="insp__body twk" id="inspPaneTweak" role="tabpanel" aria-labelledby="inspTabTweak" hidden>
+      <div class="twk__thread" id="twkThread"></div>
+
+      <p class="twk__empty" id="twkEmpty">
+        Describe a change and it lands on the page. Click elements first to point
+        at them; with nothing selected, it is about the whole page.
+      </p>
+
+      <form class="twk__form" id="twkForm">
+        <div class="twk__refs" id="twkRefs" hidden></div>
+        <textarea id="twkText" rows="3" spellcheck="false"
+          placeholder="Make the headline bigger and tighten its tracking"></textarea>
+        <div class="twk__foot">
+          <button class="btn btn--solid" id="twkSend" type="submit">Tweak</button>
+          <span class="ws__hint">⌘⏎</span>
+          <button class="twk__clear" id="twkClear" type="button">Clear</button>
+        </div>
+      </form>
     </div>
 
     <footer class="insp__foot">
