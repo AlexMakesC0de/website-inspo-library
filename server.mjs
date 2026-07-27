@@ -31,7 +31,16 @@ const MIME = {
 /* ── data.json ─────────────────────────────────────────────────────────── */
 
 async function readData() {
-  const raw = await readFile(DATA, 'utf8');
+  let raw;
+  try {
+    raw = await readFile(DATA, 'utf8');
+  } catch (err) {
+    // A clone has no library. data.json is deliberately not in the repo — it is
+    // one person's taste, and shipping it would hand every new user someone
+    // else's. Start an empty one rather than refusing to boot.
+    if (err.code !== 'ENOENT') throw err;
+    return writeData({ groups: [], entries: [] });
+  }
   const data = JSON.parse(raw);
   data.groups ??= [];
   data.entries ??= [];
@@ -257,6 +266,51 @@ async function studioApi(req, res, url) {
       }
     }
     return json(res, 405, { error: 'unsupported method' });
+  }
+
+  /* One tweak takes seconds rather than the minutes a generation takes, so it
+     answers on its own request instead of over the event stream. The page is
+     saved by the inspector's own save, not here — this only returns the patch
+     and records what was said. */
+  if (action === 'tweak') {
+    if (req.method === 'GET') {
+      return json(res, 200, studio.listTweaks(project, url.searchParams.get('path')));
+    }
+    if (req.method === 'POST') {
+      const body = await readBody(req);
+      try {
+        return json(res, 200, await studio.runTweak(project, body.path, {
+          message: body.message,
+          refs: Array.isArray(body.refs) ? body.refs : [],
+          patch: String(body.patch || ''),
+        }));
+      } catch (err) {
+        return json(res, 400, { error: err.message });
+      }
+    }
+    if (req.method === 'DELETE') {
+      try {
+        return json(res, 200, await studio.clearTweaks(project, url.searchParams.get('path')));
+      } catch (err) {
+        return json(res, 400, { error: err.message });
+      }
+    }
+    return json(res, 405, { error: 'unsupported method' });
+  }
+
+  /* The asset pass. Slower than a tweak (it runs a generator N times), so the
+     panel shows its own waiting state rather than pretending this is instant. */
+  if (action === 'assets' && req.method === 'POST') {
+    const body = await readBody(req);
+    try {
+      return json(res, 200, await studio.generateAssets(project, body.path, {
+        request: body.request,
+        count: body.count,
+        aspect: body.aspect,
+      }));
+    } catch (err) {
+      return json(res, 400, { error: err.message });
+    }
   }
 
   if (action === 'edit' && req.method === 'GET') {

@@ -105,7 +105,14 @@ function sample(pool, n, seed, exclude = []) {
 /* ── References ────────────────────────────────────────────────────────────── */
 
 export async function readLibrary() {
-  const data = JSON.parse(await readFile(DATA, 'utf8'));
+  let data;
+  try {
+    data = JSON.parse(await readFile(DATA, 'utf8'));
+  } catch (err) {
+    // Same reason as the server's reader: a clone starts with no library.
+    if (err.code !== 'ENOENT') throw err;
+    data = {};
+  }
   data.groups ??= [];
   data.entries ??= [];
   return data;
@@ -195,6 +202,15 @@ const BUILD_RULES = `## What to build
 
   Those data-asset-prompt values are read later by an image pipeline, so write
   them as real asset prompts: a photograph or illustration, never an interface.
+
+  THE STAND-IN IS THE PART THAT USUALLY FAILS. A two-stop linear-gradient in a
+  rectangle is not a stand-in. At the size these frames run, it becomes the
+  largest dead area on the page and it reads as unfinished work. Build the
+  stand-in from the same world as everything else, at the frame's own scale:
+  registration marks, a halftone or dither field, a ruled grid, sprocket
+  perforations, a duotone SVG figure, a caption plate, a torn edge. Use at
+  least three CSS techniques in it and give it something with a hard edge.
+  Cropped out of the page and shown alone, it should still look designed.
 - MOTION: give the page real motion in the character the references suggest —
   entrances, hover states, transitions with chosen durations and easing. CSS
   only. Wrap it all so that a @media (prefers-reduced-motion: reduce) block
@@ -229,9 +245,57 @@ too hard on one reference becomes visible immediately. Be specific and be honest
 Write the file. Do not explain it, do not summarise it, do not ask anything.`;
 }
 
+/* The runs are spawned with --disable-slash-commands and no MCP, so no skill can
+   reach them. Anything the generator needs to know about craft has to be in this
+   string. The floor below is the mechanical half of Impeccable's craft floor,
+   rewritten for a pipeline that builds one page and stops. */
 const SYSTEM = `You are a designer who builds. You produce complete, self-contained
 HTML pages with inline CSS and no dependencies, and you commit fully to a
 direction rather than hedging between several.
+
+## The floor
+
+These are checks on the built result, not intentions. Each is cheap to satisfy
+and each one is conspicuous when it is missing.
+
+- CONTRAST: body and placeholder text at 4.5:1 or better, large text at 3:1.
+  On a coloured ground, tint secondary text from that hue — never flat grey.
+- SPACING: tight inside a group, generous between groups, more room above a
+  heading than below it. A page whose sections are all separated by the same
+  gap has no rhythm, only padding.
+- TYPE: body measure 65–75ch. Build an obvious scale — if your display size and
+  your body size sit within 3x of each other there is no hierarchy, only sizes.
+  Tracking floor -0.04em. Balance headline line breaks.
+- DEPTH: a shadow carries an offset and a soft blur. A zero-offset coloured
+  halo is decoration, not depth.
+- MOTION: one authored moment the page is built around, not the same entrance
+  fired on every section. Ease out from an already-visible default so nothing
+  sits invisible waiting to animate.
+- STATES: hover and keyboard focus on everything interactive, and real content
+  in every slot — no container left waiting for data that never arrives.
+- FILL THE FRAME: if a composition leaves a large area empty, that emptiness
+  has to be doing something. Dead space beside a hero is not restraint.
+
+## What not to reach for
+
+The brief or a reference can earn any of these. Reaching for one because the
+axis was free means you were not deciding.
+
+- A row of same-size cards — icon, heading, three lines — as the page's
+  structure. Cards are the lazy container, and nested cards are always wrong.
+- The hero-metric template: big number, small label, supporting stats.
+- A tracked uppercase eyebrow over every section. One named kicker is a
+  system; an eyebrow everywhere is grammar you did not choose.
+- Gradient text. Emphasis is weight, size, or colour.
+- Glass and blur as decoration rather than as a specific effect.
+- A coloured border-left thicker than 1px on cards, callouts, or alerts.
+- Monospace as a costume for "technical". Mono belongs on things that are
+  measured, counted, timed, filed or coded. If it labels nothing real, it is
+  a costume.
+- Section numbers unless the sequence carries information the reader needs.
+
+With the floor green, spend the page on the world you committed to. When torn
+between refined and committed, commit.
 
 You write the file and stop. No prose, no summary, no questions, no follow-up.`;
 
@@ -374,8 +438,25 @@ export function parseHeader(html) {
   return out;
 }
 
-// Cheap structural checks only. Taste is Alex's job; this catches the page that
-// never got written, got truncated, or quietly reached for a CDN.
+/* Techniques that build a surface. Plain linear-gradient is deliberately absent:
+   a page whose only texture is a two-stop fade is the exact failure this list
+   exists to catch, so counting it would defeat the check. */
+const TEXTURE = [
+  /repeating-linear-gradient/i,
+  /repeating-radial-gradient/i,
+  /conic-gradient/i,
+  /radial-gradient/i,
+  /mix-blend-mode/i,
+  /feTurbulence/i,
+  /feDisplacementMap/i,
+  /clip-path/i,
+  /mask-image/i,
+  /backdrop-filter/i,
+];
+
+// Structural checks, plus the rules the prompt states outright and used to ask
+// for on trust. Taste is still Alex's job; a variant that failed one of these
+// did not make a judgement call, it dropped an instruction.
 function validate(html) {
   const problems = [];
   if (html.length < 1500) problems.push('suspiciously short');
@@ -384,6 +465,25 @@ function validate(html) {
   if (!/<style[\s>]/i.test(html)) problems.push('no inline <style>');
   const external = html.match(/<script[^>]+src=["']https?:/gi);
   if (external) problems.push(`${external.length} external script${external.length === 1 ? '' : 's'} — the page must be self-contained`);
+
+  const h1 = (html.match(/<h1[\s>]/gi) || []).length;
+  if (h1 !== 1) problems.push(h1 === 0 ? 'no <h1>' : `${h1} <h1> elements — there must be exactly one`);
+
+  if (!/@media[^{]*prefers-reduced-motion/i.test(html)) problems.push('no prefers-reduced-motion block');
+  if (!/@media[^{]*\((?:max|min)-width/i.test(html)) problems.push('no responsive breakpoint');
+
+  const placeholder = html.match(/lorem ipsum|your headline here|\[(?:your|placeholder|insert)\b[^\]]*\]/i);
+  if (placeholder) problems.push(`placeholder copy — "${placeholder[0].slice(0, 40)}"`);
+
+  if (/data-asset-prompt=["']\s*["']/i.test(html)) problems.push('an asset frame has an empty data-asset-prompt');
+
+  // A proxy, and the only one here: the stand-in art is where these pages go
+  // flat, and a page built from two-stop fills is the shape that takes.
+  const techniques = TEXTURE.filter((re) => re.test(html)).length;
+  if (techniques < 3) {
+    problems.push(`only ${techniques} texture technique${techniques === 1 ? '' : 's'} — the page is built out of flat fills`);
+  }
+
   return problems;
 }
 
@@ -792,6 +892,453 @@ export async function revertEdit(project, path) {
   await copyFile(baseline, file);
   await rm(baseline, { force: true });
   return { ok: true };
+}
+
+/* ── Tweak ──────────────────────────────────────────────────────────────────
+   The workspace's chat. Generating owns building a page; this owns adjusting
+   the one in front of you, and the difference that matters is latency: a tweak
+   answers in seconds because it returns a stylesheet rather than a file.
+
+   The patch is always returned whole, never as a delta. The panel replaces its
+   one <style> tag with whatever comes back, so a model that forgets a previous
+   rule deletes it — which is why the current patch goes into every prompt and
+   the contract below says so twice.                                          */
+
+const TWEAK_MODEL = process.env.TWEAK_MODEL || 'sonnet';
+const TWEAK_EFFORT = process.env.TWEAK_EFFORT || 'medium';
+
+export const TWEAK_SYSTEM = `You are adjusting one finished landing page, in place, for the
+designer who is looking at it. You answer with a stylesheet and nothing else.
+
+You have taste and you use it. When the request is loose — "give this more air",
+"make it feel colder" — choose specific values and commit to them rather than
+asking which ones. When the request would hurt the page, say so in one sentence
+in your reply, then do the closest thing that would not.
+
+Hold the page's own world. Read the fonts, the palette, the spacing rhythm and
+the rules it already has, and stay inside them unless the request is explicitly
+to change one. A tweak that looks bolted on has failed even when it does what
+it was asked.
+
+Separate what you WON'T do from what you CAN'T. You emit CSS: you cannot draw
+or photograph, and you cannot add an element. Never argue about whether a
+picture suits the page — dressing a limit up as a design objection is the one
+thing that makes this tool useless to the person using it.
+
+Pictures have exactly two paths, and prose is neither of them:
+
+- A file listed under "Images on disk beside this page" is real. Place it with
+  a relative url().
+- A picture that does not exist yet goes in an \`\`\`image fence, described in
+  one line. Something downstream generates it. Do not ask for the file, do not
+  say you need it supplied, and do not offer a CSS substitute — emitting the
+  fence IS how you ask for it.
+
+You answer in two parts: a sentence or two of plain prose, then the complete
+patch in one fenced css block. Never put the stylesheet inside a JSON string.`;
+
+/* The stylesheet gets its own fence rather than a string inside a JSON object.
+   Asked for the JSON shape, the model escapes the inner quotes correctly and
+   then writes raw newlines anyway — invalid JSON, roughly a third of the time,
+   and worse the longer the patch. A fenced block makes newlines legal, so the
+   payload cannot break the envelope. */
+function tweakContract(patch) {
+  return `## How to answer
+
+Two parts, in this order, and nothing else.
+
+**First**, one or two plain sentences saying what you changed. No heading, no
+label, no preamble — just the sentences.
+
+**Then** the complete patch, in one fenced css block:
+
+\`\`\`css
+.hero { ... }
+\`\`\`
+
+- The css block REPLACES the entire patch. It is not a diff. Everything from
+  the current patch that should still apply must appear in it again, or it is
+  gone. ${patch.trim() ? 'The current patch is above — carry it forward.' : 'There is no patch yet, so this is the whole of it.'}
+- Write real CSS: rules, media queries, keyframes, pseudo-elements, custom
+  properties. Newlines and quotes are fine — it is a css block, not a string.
+- It is injected as a stylesheet at the end of the head, so it wins ties
+  against the page's own rules without needing !important. Reach for
+  !important only where the page sets that property inline.
+- Selectors must match the page's actual markup. Prefer the classes it already
+  has over long chains of nth-child.
+
+**Only if** some words on the page need to change, add one more fenced block
+after the css:
+
+\`\`\`json
+[{ "sel": "css selector", "value": "the new text" }]
+\`\`\`
+
+Leave it out entirely when nothing needs rewording, which is most of the time.
+
+**If the request wants a picture that is not already on disk**, add this block
+instead of arguing about it:
+
+\`\`\`image
+one line describing what the picture should be, in this page's own world
+\`\`\`
+
+Do not say whether it suits the page and do not offer a CSS substitute for it.
+Something downstream can actually make the image; your job is to name it. Write
+that line as a subject and a treatment, not as a prompt — the palette and the
+framing get added later. Still emit your css block: leave it as the current
+patch if nothing else changed.
+
+You cannot add sections, reorder the page, or change its markup. If the request
+needs that, say so in your sentences and leave the css block exactly as the
+current patch is.`;
+}
+
+export function buildTweakPrompt({ message, history = [], refs = [], patch = '', source = '', images = [] }) {
+  const said = history.length
+    ? history.slice(-8).map((m) => `${m.role === 'you' ? 'DESIGNER' : 'YOU'}: ${m.text}`).join('\n\n')
+    : null;
+
+  /* The path is an nth-child chain: exact, and close to unreadable. The markup
+     is what actually lets the model find the thing and pick a selector a human
+     would have written, so both go in and the markup goes first. */
+  const pointed = refs.map((r) => [
+    `- ${r.label || r.sel}`,
+    r.html ? `  \`\`\`html\n  ${String(r.html).replace(/\n/g, ' ').slice(0, 400)}\n  \`\`\`` : null,
+    `  path: \`${r.sel}\``,
+  ].filter(Boolean).join('\n')).join('\n\n');
+
+  return `${refs.length
+    ? `## The elements being pointed at\n\n${pointed}\n\nThe request is about these unless it plainly is not. Write selectors the page\nalready supports — its own classes — rather than repeating the paths above.`
+    : '## Scope\n\nNothing is selected, so this is about the page as a whole.'}
+
+## The page
+
+\`\`\`html
+${source}
+\`\`\`
+
+${images.length ? `## Images on disk beside this page
+
+${images.map((f) => `- \`${f}\``).join('\n')}
+
+These are real files in the same folder as the page. Reach for one with a
+relative \`url()\` — \`background-image: url(${images[0]})\` — whenever the
+request wants a picture. You cannot make an image, but you can place these.
+` : ''}${patch.trim() ? `## The current patch\n\n\`\`\`css\n${patch.trim()}\n\`\`\`\n` : ''}${said ? `## What has been said so far\n\n${said}\n` : ''}
+## The request
+
+${message}
+
+${tweakContract(patch)}`;
+}
+
+const wordChanges = (value) => (Array.isArray(value) ? value : [])
+  .filter((t) => t && typeof t.sel === 'string' && typeof t.value === 'string')
+  .slice(0, 40);
+
+/* Three shapes, in falling order of preference: the fenced css the contract
+   asks for, the old single JSON object in case a model still reaches for it,
+   and — when neither is there — the reply on its own. That last case is not a
+   failure: "that needs new markup, so I did nothing" is a real answer, and
+   throwing it away to raise a parse error loses the one useful thing in it. */
+export function parseTweak(out) {
+  const text = String(out || '').trim();
+  if (!text) throw new Error('the model returned nothing');
+
+  const fences = [...text.matchAll(/```([a-z]*)[^\S\n]*\r?\n([\s\S]*?)```/gi)]
+    .map((m) => ({ lang: m[1].toLowerCase(), body: m[2], at: m.index }));
+
+  // A named picture the page does not have yet. The panel turns this into a
+  // count control rather than another sentence, so choosing costs nothing.
+  const wants = fences.filter((f) => f.lang === 'image').pop()?.body.trim().slice(0, 300) || null;
+
+  const css = fences.filter((f) => f.lang === 'css').pop();
+  if (css) {
+    let changes = [];
+    const json = fences.filter((f) => f.lang === 'json').pop();
+    if (json) {
+      // The words are optional; the patch is not. A malformed block here must
+      // not cost the stylesheet that parsed perfectly well beside it.
+      try { changes = wordChanges(JSON.parse(json.body)); } catch { /* skip */ }
+    }
+    return {
+      reply: text.slice(0, fences[0].at).trim() || 'Done.',
+      css: css.body.trim(),
+      text: changes,
+      image: wants,
+    };
+  }
+
+  if (wants) {
+    return { reply: text.slice(0, fences[0].at).trim() || 'That needs a picture.', css: null, text: [], image: wants };
+  }
+
+  const object = fences.filter((f) => f.lang === 'json').pop()?.body
+    ?? (text.startsWith('{') ? text : null);
+  if (object) {
+    try {
+      const data = JSON.parse(object);
+      if (data && typeof data === 'object' && !Array.isArray(data)) {
+        return {
+          reply: String(data.reply || '').trim() || 'Done.',
+          css: typeof data.css === 'string' ? data.css : null,
+          text: wordChanges(data.text),
+          image: null,
+        };
+      }
+    } catch { /* fall through to the reply on its own */ }
+  }
+
+  const rescued = salvage(text);
+  if (rescued) return rescued;
+
+  // No patch came back. Hand over what it did say, and change nothing.
+  return { reply: text.replace(/```[\s\S]*?```/g, '').trim() || text.slice(0, 400), css: null, text: [], image: null };
+}
+
+/* The failure the fenced format was introduced to stop: a JSON object whose css
+   string carries raw newlines. The envelope is invalid but both fields are
+   still sitting there in full, and lifting them out turns a dead turn into a
+   working one. Kept as a floor under the format, not as the way in. */
+function salvage(text) {
+  const css = text.match(/"css"\s*:\s*"([\s\S]*?)"\s*(?:,\s*"(?:text|reply)"|,?\s*\})/)?.[1];
+  if (!css || !css.trim()) return null;
+  const unescape = (s) => s.replace(/\\n/g, '\n').replace(/\\t/g, '\t')
+    .replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+  const reply = text.match(/"reply"\s*:\s*"((?:[^"\\]|\\.)*)"/)?.[1];
+  return {
+    reply: reply ? unescape(reply).trim() : 'Done.',
+    css: unescape(css).trim(),
+    text: [],
+  };
+}
+
+export function listTweaks(project, path) {
+  return (project.tweaks || []).filter((t) => !path || t.path === path);
+}
+
+async function addTweak(project, entry) {
+  project.tweaks ??= [];
+  const row = {
+    id: `t${Date.now().toString(36)}${Math.floor(Math.random() * 1e4).toString(36)}`,
+    createdAt: new Date().toISOString(),
+    ...entry,
+  };
+  project.tweaks.push(row);
+  return row;
+}
+
+export async function clearTweaks(project, path) {
+  if (!path) throw new Error('clearing a thread needs a page');
+  const before = (project.tweaks || []).length;
+  project.tweaks = (project.tweaks || []).filter((t) => t.path !== path);
+  await writeProject(project);
+  return { cleared: before - project.tweaks.length };
+}
+
+/* ── The asset pass ─────────────────────────────────────────────────────────
+   The step studio.mjs has promised since the first build rules: something that
+   reads an asset frame and puts a real picture in it.
+
+   Two rules earned the hard way. A reference contributes CHARACTER, never its
+   own image prompt — SKYCLINICS' prompt is a cool blue photograph, and pasted
+   onto a warm printed-matter page it fights everything and no CSS filter saves
+   it. And a generation model, asked for "a duotone halftone print", will hand
+   back a PHOTOGRAPH OF ONE: paper edges, drop shadow, ornate frame, a title
+   baked into the plate. Both failures are prompt-shaped, so both are fixed
+   here rather than in whoever is reading the picture afterwards.             */
+
+const ASSET_SYSTEM = `You write prompts for an image generator, then run them.
+
+The picture has to belong to one specific page. You are given that page's own
+visual world, its palette, the design references behind it, and the words the
+designer actually used. Compose from all four:
+
+- THE PAGE'S WORLD decides medium and palette. A printed-matter page gets a
+  printed artefact; a night-field page gets something that glows. Name the
+  page's actual ink and paper colours in the prompt.
+- THE REFERENCES contribute character and moves only — atmosphere, scale,
+  what the subject is doing. Never copy a reference's own image prompt, and
+  never carry its palette across. A reference is how it feels, not what it is.
+- THE DESIGNER'S WORDS decide the subject and are not up for negotiation. If
+  they asked for a mountain, every variation is a mountain.
+- EACH VARIATION takes a genuinely different medium or treatment. Four
+  rewordings of one idea is a failed pass.
+
+Every prompt you write must end with the framing rules, because the model's
+default is to hand back a photograph of a printed object rather than the thing
+itself:
+
+  FULL BLEED, fills the entire frame edge to edge. No border, no paper edge,
+  no torn edge, no mount, no drop shadow, no surrounding surface, no vignette
+  frame. No text, no title, no lettering, no caption, no watermark.
+
+Generate every variation, wait for all of them, and report the URLs.`;
+
+export function buildAssetPrompt({ world, palette, request, refs = [], count, aspect }) {
+  return `Make ${count} image${count === 1 ? '' : 's'} for one page.
+
+## What the designer asked for
+
+${request}
+
+## The page's world
+
+${world || '(not stated — read it from the palette below)'}
+
+${palette.length ? `Its palette, which the picture must live inside:\n\n${palette.map((c) => `- \`${c.name}\`: ${c.value}`).join('\n')}` : ''}
+
+${refs.length ? `## The design references behind this page
+
+${refs.map((r) => `- **${r.title}** — ${r.descriptor || ''}\n  character: ${(r.recipe || '').slice(0, 260)}`).join('\n\n')}
+
+Take atmosphere and scale from these. Do not take their palette, and do not
+reuse any image prompt they carry.` : ''}
+
+## How to do it
+
+1. Write ${count} distinct prompt${count === 1 ? '' : 's'} — different medium or treatment each,
+   same subject, all inside the page's palette, each ending with the framing rules.
+2. Call generate_image once per prompt with model "nano_banana_pro" and
+   aspect_ratio "${aspect}".
+3. Poll job_status with sync true until each is completed.
+
+## Answer with
+
+One fenced json block and nothing else:
+
+\`\`\`json
+{ "assets": [ { "style": "two or three words naming the treatment", "prompt": "the prompt you used", "url": "the completed rawUrl" } ] }
+\`\`\``;
+}
+
+/* The page's own account of itself, which the generator wrote into its header,
+   plus whatever custom properties it settled on. Together these are a better
+   brief than anything a second model would infer from the markup. */
+export function pageWorld(source) {
+  const world = parseHeader(source).world || '';
+  const seen = new Map();
+  for (const m of source.matchAll(/(--[a-z][a-z0-9-]*)\s*:\s*(#[0-9a-f]{3,8}|rgba?\([^)]+\)|oklch\([^)]+\))/gi)) {
+    if (!seen.has(m[1])) seen.set(m[1], m[2]);
+  }
+  return { world, palette: [...seen].slice(0, 12).map(([name, value]) => ({ name, value })) };
+}
+
+/* No --tools allowlist here, deliberately. Naming the MCP tools in it does not
+   allow them, it silently removes them: the run then narrates "I'll call that
+   tool now" and returns having called nothing, which looks exactly like a model
+   failure and is not one. The permission mode has to be bypassPermissions for
+   the same reason dontAsk cannot write a page — it denies rather than asks. The
+   run is given the page's own folder as its cwd and a system prompt with one
+   job, which is the containment that is actually available. */
+
+export async function generateAssets(project, path, { request, count = 4, aspect = '16:9' } = {}) {
+  if (!VARIANT_PATH.test(String(path))) throw new Error('that is not a variant page');
+  const want = Math.min(Math.max(Number(count) || 1, 1), 4);
+  const asked = String(request || '').trim();
+  if (!asked) throw new Error('an image needs a description');
+
+  const file = editTarget(project, path);
+  if (!await exists(file)) throw new Error('no such page');
+  const source = await readFile(file, 'utf8');
+  const { world, palette } = pageWorld(source);
+
+  const data = await readLibrary();
+  const refs = (project.references || [])
+    .map((id) => data.entries.find((e) => e.id === id))
+    .filter(Boolean)
+    .slice(0, 4);
+
+  const result = await runClaude({
+    args: [
+      '-p', buildAssetPrompt({ world, palette, request: asked, refs, count: want, aspect }),
+      '--system-prompt', ASSET_SYSTEM,
+      // The one step that needs MCP, so --strict-mcp-config is absent here.
+      '--permission-mode', 'bypassPermissions',
+      '--disable-slash-commands',
+      '--model', TWEAK_MODEL,
+      '--effort', TWEAK_EFFORT,
+      '--output-format', 'stream-json',
+      '--verbose',
+    ],
+    cwd: dirname(file),
+  });
+
+  const block = String(result.result || '').match(/```(?:json)?\s*\r?\n([\s\S]*?)```/);
+  let assets = [];
+  try {
+    assets = JSON.parse(block ? block[1] : String(result.result))?.assets || [];
+  } catch {
+    throw new Error('the asset pass did not report any images');
+  }
+  assets = assets.filter((a) => a && typeof a.url === 'string' && /^https?:\/\//.test(a.url));
+  if (!assets.length) throw new Error('the asset pass did not report any images');
+
+  // Downloaded beside the page, because that is where a relative url() can
+  // reach them and where the tweak pass already looks.
+  const stamp = Date.now().toString(36);
+  const out = [];
+  for (const [i, asset] of assets.entries()) {
+    const name = `asset-${stamp}-${String.fromCharCode(97 + i)}.png`;
+    const res = await fetch(asset.url);
+    if (!res.ok) continue;
+    await writeFile(join(dirname(file), name), Buffer.from(await res.arrayBuffer()));
+    out.push({ file: name, style: String(asset.style || '').slice(0, 60), prompt: String(asset.prompt || '').slice(0, 600) });
+  }
+  if (!out.length) throw new Error('every image failed to download');
+  return { assets: out };
+}
+
+export async function runTweak(project, path, { message, refs = [], patch = '' }) {
+  if (!VARIANT_PATH.test(String(path))) throw new Error('that is not a variant page');
+  const said = String(message || '').trim();
+  if (!said) throw new Error('a tweak needs something to ask for');
+
+  const file = editTarget(project, path);
+  if (!await exists(file)) throw new Error('no such page');
+  const source = await readFile(file, 'utf8');
+
+  /* Anything droppable into the page's own folder is fair game for a url().
+     This is the whole reason a tweak can put a photograph on a page it could
+     never have drawn: someone else made the file, and CSS can point at it. */
+  const images = await readdir(dirname(file))
+    .then((names) => names.filter((n) => /\.(png|jpe?g|webp|avif|gif|svg)$/i.test(n)).sort())
+    .catch(() => []);
+
+  const history = listTweaks(project, path);
+  const prompt = buildTweakPrompt({ message: said, history, refs, patch, source, images });
+
+  const result = await runClaude({
+    args: [
+      '-p', prompt,
+      '--system-prompt', TWEAK_SYSTEM,
+      // Nothing to read and nothing to write: the page is in the prompt and the
+      // answer comes back as text. A tool here would only be a way to go wrong.
+      '--tools', '',
+      '--permission-mode', 'dontAsk',
+      '--disable-slash-commands',
+      '--strict-mcp-config',
+      '--model', TWEAK_MODEL,
+      '--effort', TWEAK_EFFORT,
+      '--output-format', 'stream-json',
+      '--verbose',
+    ],
+    cwd: projectDir(project.id),
+  });
+
+  const answer = parseTweak(result.result);
+
+  await addTweak(project, { path, role: 'you', text: said, refs: refs.map((r) => r.label || r.sel) });
+  const reply = await addTweak(project, {
+    path,
+    role: 'ai',
+    text: answer.reply,
+    changed: !!(answer.css || answer.text.length),
+  });
+  await writeProject(project);
+
+  return { ...answer, id: reply.id };
 }
 
 export async function pickWinner(project, n, key) {
